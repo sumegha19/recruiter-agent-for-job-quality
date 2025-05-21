@@ -18,7 +18,7 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
   const jobsBySector = getJobsBySector(activeTab);
   
   return (
-    <div className="w-full h-full bg-white border-r">
+    <div className="w-full h-full flex flex-col">
       <div className="p-4 border-b bg-reed-light">
         <h3 className="font-semibold text-lg text-reed-secondary">Your Job Listings</h3>
         <div className="relative mt-2">
@@ -31,7 +31,7 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
         </div>
       </div>
       
-      <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
+      <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <div className="px-2 pt-2 bg-white">
           <TabsList className="w-full justify-start overflow-x-auto">
             {sectors.map((sector) => (
@@ -43,8 +43,8 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
         </div>
         
         {sectors.map((sector) => (
-          <TabsContent key={sector} value={sector} className="mt-0">
-            <ScrollArea className="h-[calc(100vh-230px)]">
+          <TabsContent key={sector} value={sector} className="mt-0 flex-1 flex flex-col">
+            <ScrollArea className="flex-1">
               <div className="p-2 space-y-2">
                 {getJobsBySector(sector).map((job) => (
                   <div 
