@@ -7,7 +7,9 @@ import JobSidebar from '@/components/jobs/JobSidebar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { currentUser, jobs } from '@/data/mockData';
-import { ArrowDown, Check, Info, MapPin, Briefcase, List, ChevronDown } from 'lucide-react';
+import { ArrowDown, Check, Info, MapPin, Briefcase, List, ChevronDown, BarChart, Clock, Users, TrendingUp, TrendingDown, Activity, Calendar } from 'lucide-react';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart as RechartsBarChart, Bar, Legend } from 'recharts';
 
 const JobOptimisations = () => {
   const { jobId } = useParams();
@@ -47,22 +49,76 @@ const JobOptimisations = () => {
   // Mock data for optimization statuses - would come from backend in real scenario
   const optimizations = {
     salary: {
-      status: 'red', // red, amber, green
+      status: 'red', 
       message: 'No Salary provided',
       improvement: '+45% applications when salary is clearly stated',
       action: 'Add Salary Range'
     },
     location: {
-      status: 'amber', // red, amber, green
+      status: 'amber', 
       message: 'Town level location provided',
       improvement: '+30% applications with specific location',
       action: 'Include Postcode'
     },
     jobTitle: {
-      status: 'green', // red, amber, green
+      status: 'green', 
       message: 'Title is optimal',
       improvement: '+65% view rate with optimised title',
       action: 'Title is Optimised'
+    }
+  };
+
+  // Mock data for performance metrics
+  const performanceMetrics = {
+    timeToFirstApplication: {
+      value: '8.5 hours',
+      change: -15,
+      benchmark: '10 hours',
+      chartData: [
+        { name: 'Mon', value: 15 },
+        { name: 'Tue', value: 12 },
+        { name: 'Wed', value: 9 },
+        { name: 'Thu', value: 8.5 },
+        { name: 'Fri', value: 10 },
+        { name: 'Sat', value: 14 },
+        { name: 'Sun', value: 11 },
+      ]
+    },
+    applicationsPerVacancy: {
+      value: 32,
+      change: 8,
+      benchmark: 25,
+      chartData: [
+        { name: 'Week 1', value: 12 },
+        { name: 'Week 2', value: 18 },
+        { name: 'Week 3', value: 24 },
+        { name: 'Week 4', value: 32 },
+      ]
+    },
+    firstWeekApplications: {
+      value: 18,
+      change: 5,
+      benchmark: 15,
+      chartData: [
+        { name: 'Day 1', value: 6 },
+        { name: 'Day 2', value: 4 },
+        { name: 'Day 3', value: 3 },
+        { name: 'Day 4', value: 2 },
+        { name: 'Day 5', value: 1 },
+        { name: 'Day 6', value: 1 },
+        { name: 'Day 7', value: 1 },
+      ]
+    },
+    conversionRate: {
+      value: '42%',
+      change: 5,
+      benchmark: '35%',
+      chartData: [
+        { name: 'Week 1', value: 30 },
+        { name: 'Week 2', value: 34 },
+        { name: 'Week 3', value: 38 },
+        { name: 'Week 4', value: 42 },
+      ]
     }
   };
 
@@ -93,6 +149,15 @@ const JobOptimisations = () => {
         };
     }
   };
+
+  const getChangeIcon = (change) => {
+    if (change > 0) {
+      return <TrendingUp className="h-5 w-5 text-green-500" />;
+    } else if (change < 0) {
+      return <TrendingDown className="h-5 w-5 text-red-500" />;
+    }
+    return <Activity className="h-5 w-5 text-gray-500" />;
+  };
   
   return (
     <div className="min-h-screen flex flex-col bg-reed-light">
@@ -112,6 +177,195 @@ const JobOptimisations = () => {
             <h1 className="text-2xl font-bold text-reed-secondary">Optimisations for: {job.title}</h1>
             <p className="text-gray-600">{job.company} • {job.location}</p>
           </div>
+          
+          {/* Performance Metrics Widget */}
+          <Card className="mb-6 bg-white hover:shadow-lg transition-shadow">
+            <CardHeader className="border-b bg-white">
+              <CardTitle className="text-lg flex items-center">
+                <div className="rounded-full bg-reed/10 p-3 mr-3">
+                  <BarChart className="h-6 w-6 text-reed" />
+                </div>
+                Performance Metrics
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Time to First Application */}
+                <Card className="bg-white border-none shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="rounded-full bg-blue-100 p-2 mr-2">
+                          <Clock className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <h3 className="text-sm font-medium">Avg. Time to First App</h3>
+                      </div>
+                      <div className="flex items-center">
+                        {getChangeIcon(performanceMetrics.timeToFirstApplication.change)}
+                        <span className={`text-xs font-medium ml-1 ${
+                          performanceMetrics.timeToFirstApplication.change < 0 
+                            ? 'text-green-500' 
+                            : performanceMetrics.timeToFirstApplication.change > 0 
+                              ? 'text-red-500' 
+                              : 'text-gray-500'
+                        }`}>
+                          {Math.abs(performanceMetrics.timeToFirstApplication.change)}%
+                        </span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-bold">{performanceMetrics.timeToFirstApplication.value}</span>
+                      <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.timeToFirstApplication.benchmark}</span>
+                      <div className="h-16 mt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={performanceMetrics.timeToFirstApplication.chartData}>
+                            <defs>
+                              <linearGradient id="timeGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                              </linearGradient>
+                            </defs>
+                            <Area type="monotone" dataKey="value" stroke="#3B82F6" fill="url(#timeGradient)" />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Applications per Vacancy */}
+                <Card className="bg-white border-none shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="rounded-full bg-purple-100 p-2 mr-2">
+                          <Users className="h-4 w-4 text-purple-600" />
+                        </div>
+                        <h3 className="text-sm font-medium">Apps per Vacancy</h3>
+                      </div>
+                      <div className="flex items-center">
+                        {getChangeIcon(performanceMetrics.applicationsPerVacancy.change)}
+                        <span className={`text-xs font-medium ml-1 ${
+                          performanceMetrics.applicationsPerVacancy.change > 0 
+                            ? 'text-green-500' 
+                            : performanceMetrics.applicationsPerVacancy.change < 0 
+                              ? 'text-red-500' 
+                              : 'text-gray-500'
+                        }`}>
+                          {Math.abs(performanceMetrics.applicationsPerVacancy.change)}%
+                        </span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-bold">{performanceMetrics.applicationsPerVacancy.value}</span>
+                      <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.applicationsPerVacancy.benchmark}</span>
+                      <div className="h-16 mt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={performanceMetrics.applicationsPerVacancy.chartData}>
+                            <defs>
+                              <linearGradient id="apvGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
+                              </linearGradient>
+                            </defs>
+                            <Area type="monotone" dataKey="value" stroke="#8B5CF6" fill="url(#apvGradient)" />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* First Week Applications */}
+                <Card className="bg-white border-none shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="rounded-full bg-green-100 p-2 mr-2">
+                          <Calendar className="h-4 w-4 text-green-600" />
+                        </div>
+                        <h3 className="text-sm font-medium">First 7 Days Apps</h3>
+                      </div>
+                      <div className="flex items-center">
+                        {getChangeIcon(performanceMetrics.firstWeekApplications.change)}
+                        <span className={`text-xs font-medium ml-1 ${
+                          performanceMetrics.firstWeekApplications.change > 0 
+                            ? 'text-green-500' 
+                            : performanceMetrics.firstWeekApplications.change < 0 
+                              ? 'text-red-500' 
+                              : 'text-gray-500'
+                        }`}>
+                          {Math.abs(performanceMetrics.firstWeekApplications.change)}%
+                        </span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-bold">{performanceMetrics.firstWeekApplications.value}</span>
+                      <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.firstWeekApplications.benchmark}</span>
+                      <div className="h-16 mt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <RechartsBarChart data={performanceMetrics.firstWeekApplications.chartData}>
+                            <Bar dataKey="value" fill="#10B981" radius={[4, 4, 0, 0]} />
+                          </RechartsBarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Conversion Rate */}
+                <Card className="bg-white border-none shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="rounded-full bg-amber-100 p-2 mr-2">
+                          <Activity className="h-4 w-4 text-amber-600" />
+                        </div>
+                        <h3 className="text-sm font-medium">Conversion Rate</h3>
+                      </div>
+                      <div className="flex items-center">
+                        {getChangeIcon(performanceMetrics.conversionRate.change)}
+                        <span className={`text-xs font-medium ml-1 ${
+                          performanceMetrics.conversionRate.change > 0 
+                            ? 'text-green-500' 
+                            : performanceMetrics.conversionRate.change < 0 
+                              ? 'text-red-500' 
+                              : 'text-gray-500'
+                        }`}>
+                          {Math.abs(performanceMetrics.conversionRate.change)}%
+                        </span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-bold">{performanceMetrics.conversionRate.value}</span>
+                      <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.conversionRate.benchmark}</span>
+                      <div className="h-16 mt-2">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={performanceMetrics.conversionRate.chartData}>
+                            <defs>
+                              <linearGradient id="conversionGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#F59E0B" stopOpacity={0}/>
+                              </linearGradient>
+                            </defs>
+                            <Area type="monotone" dataKey="value" stroke="#F59E0B" fill="url(#conversionGradient)" />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
           
           {/* Top 3 Widgets */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
