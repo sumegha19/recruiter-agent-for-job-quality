@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -84,8 +83,8 @@ const MarketInsights = () => {
     demandIndexTrend: "+1.2",
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
+  const handleGoHome = () => {
+    navigate('/');
   };
 
   return (
@@ -93,10 +92,10 @@ const MarketInsights = () => {
       <Header user={currentUser} />
       
       <div className="flex-1 p-6 max-w-7xl mx-auto w-full">
-        {/* Go Back Button */}
+        {/* Go Back Button - Updated to go to homepage */}
         <Button 
           variant="ghost" 
-          onClick={handleGoBack} 
+          onClick={handleGoHome} 
           className="mb-4 hover:bg-gray-100 -ml-2"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
