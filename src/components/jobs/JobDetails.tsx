@@ -7,6 +7,7 @@ import { getSuggestionsByJobId } from '@/data/mockData';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Edit, Share, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface JobDetailsProps {
   job: Job | null;
@@ -70,8 +71,10 @@ const JobDetails = ({ job }: JobDetailsProps) => {
           </div>
 
           <div className="mt-6 flex justify-end">
-            <Button className="bg-reed hover:bg-reed-hover">
-              View Applications <ChevronRight className="ml-1 h-4 w-4" />
+            <Button className="bg-reed hover:bg-reed-hover" asChild>
+              <Link to={`/jobs/${job.id}/optimisations`}>
+                Optimisations and Suggestions <ChevronRight className="ml-1 h-4 w-4" />
+              </Link>
             </Button>
           </div>
         </CardContent>
