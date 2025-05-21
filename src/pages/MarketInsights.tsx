@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
@@ -8,6 +8,16 @@ import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBa
 import Header from '@/components/layout/Header';
 import { Button } from "@/components/ui/button";
 import { currentUser } from '@/data/mockData';
+import { 
+  HoverCard, 
+  HoverCardContent, 
+  HoverCardTrigger 
+} from "@/components/ui/hover-card";
+import { 
+  Popover, 
+  PopoverContent, 
+  PopoverTrigger 
+} from "@/components/ui/popover";
 
 const itMarketData = [
   { name: 'Jan', value: 4000 },
@@ -24,6 +34,12 @@ const positionTrends = [
   { name: 'Data Science', values: 22.4, fill: '#9333EA' },
   { name: 'UX/UI', values: 20.1, fill: '#C084FC' },
   { name: 'Security', values: 18.9, fill: '#A855F7' },
+];
+
+const suggestedQuestions = [
+  "Which companies are currently hiring the most in the IT and telecom sector?",
+  "What keywords in the job description should I include to attract more candidates?",
+  "Are there any emerging skills I should include in this job posting?"
 ];
 
 // Custom tooltip component for Recharts
@@ -51,6 +67,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const MarketInsights = () => {
   const navigate = useNavigate();
   const selectSector = "IT & Telecom";
+  const [isInputFocused, setIsInputFocused] = useState(false);
   
   const sectorMetrics = {
     averageSalary: "£75,400",
@@ -86,11 +103,57 @@ const MarketInsights = () => {
           Back
         </Button>
         
-        {/* Message Bubble/Prompt */}
-        <div className="bg-gray-100 rounded-lg p-4 mb-6 flex items-center shadow-sm border border-gray-200">
-          <MessageCircle className="h-5 w-5 text-gray-400 mr-3" />
-          <p className="text-gray-400 text-sm">What do you want to know?</p>
-        </div>
+        {/* Message Bubble/Prompt with HoverCard and Popover */}
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <div 
+                    className={`bg-gray-100 rounded-lg p-4 mb-6 flex items-center shadow-sm border border-gray-200 cursor-text relative ${isInputFocused ? 'ring-2 ring-reed/40' : 'hover:border-gray-300'}`}
+                    onClick={() => setIsInputFocused(true)}
+                    onBlur={() => setIsInputFocused(false)}
+                    tabIndex={0}
+                  >
+                    <MessageCircle className="h-5 w-5 text-gray-400 mr-3" />
+                    <p className="text-gray-400 text-sm flex items-center">
+                      What do you want to know?
+                      {isInputFocused && (
+                        <span className="h-4 w-0.5 bg-reed ml-0.5 animate-pulse"></span>
+                      )}
+                    </p>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-full max-w-md p-0 shadow-lg border-gray-200" align="start">
+                  <div className="py-2">
+                    <p className="px-4 py-2 text-sm font-medium text-gray-700">Suggested Questions</p>
+                    <div className="mt-1">
+                      {suggestedQuestions.map((question, index) => (
+                        <button 
+                          key={index} 
+                          className="px-4 py-3 text-sm text-left w-full hover:bg-gray-100 border-t border-gray-100 flex items-start"
+                        >
+                          <span className="text-reed mr-2 mt-0.5">•</span>
+                          {question}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-80">
+            <div className="flex justify-between space-x-4">
+              <div>
+                <h4 className="text-sm font-semibold">✨ New Feature!</h4>
+                <p className="text-sm text-muted-foreground">
+                  Ask our AI assistant about market trends and job insights to optimize your job posting.
+                </p>
+              </div>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
         
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <div>
