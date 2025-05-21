@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -190,7 +189,7 @@ const JobOptimisations = () => {
                         <div className="rounded-full bg-blue-100 p-2 mr-2">
                           <Clock className="h-4 w-4 text-blue-600" />
                         </div>
-                        <h3 className="text-sm font-medium">Avg. Time to First App</h3>
+                        <h3 className="text-sm font-medium">Time to First Application</h3>
                       </div>
                       <div className="flex items-center">
                         {getChangeIcon(performanceMetrics.timeToFirstApplication.change)}
@@ -235,7 +234,7 @@ const JobOptimisations = () => {
                         <div className="rounded-full bg-purple-100 p-2 mr-2">
                           <Users className="h-4 w-4 text-purple-600" />
                         </div>
-                        <h3 className="text-sm font-medium">Apps per Vacancy</h3>
+                        <h3 className="text-sm font-medium">Applications per Vacancy</h3>
                       </div>
                       <div className="flex items-center">
                         {getChangeIcon(performanceMetrics.applicationsPerVacancy.change)}
@@ -280,7 +279,7 @@ const JobOptimisations = () => {
                         <div className="rounded-full bg-green-100 p-2 mr-2">
                           <Calendar className="h-4 w-4 text-green-600" />
                         </div>
-                        <h3 className="text-sm font-medium">First 7 Days Apps</h3>
+                        <h3 className="text-sm font-medium">First 7 Days Applications</h3>
                       </div>
                       <div className="flex items-center">
                         {getChangeIcon(performanceMetrics.firstWeekApplications.change)}
