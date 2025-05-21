@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBar, ArrowLeft } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBar, ArrowLeft, MessageCircle } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import { Button } from "@/components/ui/button";
 import { currentUser } from '@/data/mockData';
@@ -84,6 +85,12 @@ const MarketInsights = () => {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
+        
+        {/* Message Bubble/Prompt */}
+        <div className="bg-gray-100 rounded-lg p-4 mb-6 flex items-center shadow-sm border border-gray-200">
+          <MessageCircle className="h-5 w-5 text-gray-400 mr-3" />
+          <p className="text-gray-400 text-sm">What do you want to know?</p>
+        </div>
         
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <div>
