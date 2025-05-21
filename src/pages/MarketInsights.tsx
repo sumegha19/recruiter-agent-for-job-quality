@@ -113,7 +113,7 @@ const MarketInsights = () => {
           />
 
           <MetricCard 
-            title="Average Time to Fill (days)"
+            title="Time to Fill (days)"
             value={sectorMetrics.timeToFill}
             trend={sectorMetrics.timeToFillTrend}
             trendPositive={true}
