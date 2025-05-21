@@ -63,11 +63,12 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				amazon: {
-					DEFAULT: '#232F3E',
-					hover: '#374357',
-					light: '#F5F5F5',
-					yellow: '#FF9900'
+				reed: {
+					DEFAULT: '#D71921', // Reed's primary red
+					hover: '#BB151C',   // Darker red for hover states
+					light: '#F8F7F7',   // Light background
+					secondary: '#2D2D2D', // Dark gray for text
+					accent: '#0066CC'    // Blue accent color
 				}
 			},
 			borderRadius: {

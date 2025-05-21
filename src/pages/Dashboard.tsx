@@ -11,12 +11,12 @@ const Dashboard = () => {
   const [selectedJob, setSelectedJob] = useState<Job | null>(jobs.length > 0 ? jobs[0] : null);
   
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header user={currentUser} />
+    <div className="min-h-screen flex flex-col bg-white">
+      <Header user={{...currentUser, company: 'Reed.co.uk'}} />
       <Navigation />
       
-      <div className="flex-1 flex">
-        <div className="w-1/3 max-w-xs">
+      <div className="flex-1 flex shadow-inner">
+        <div className="w-1/3 max-w-xs border-r">
           <JobSidebar 
             onSelectJob={setSelectedJob} 
             selectedJobId={selectedJob?.id || null} 

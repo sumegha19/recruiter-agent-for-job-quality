@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User as UserIcon } from "lucide-react";
+import { User as UserIcon, Bell, HelpCircle } from "lucide-react";
 
 interface HeaderProps {
   user: User;
@@ -19,21 +19,27 @@ interface HeaderProps {
 
 const Header = ({ user }: HeaderProps) => {
   return (
-    <header className="w-full bg-amazon px-6 py-3 flex items-center justify-between border-b">
+    <header className="w-full bg-white px-6 py-3 flex items-center justify-between border-b shadow-sm">
       <div className="flex items-center gap-2">
-        <div className="text-amazon-yellow font-bold text-2xl mr-2">
-          AmazonTalent
+        <div className="text-reed font-bold text-3xl mr-2">
+          REED
         </div>
-        <span className="text-white">Recruiter Dashboard</span>
+        <span className="text-reed-secondary font-medium">Recruiter Portal</span>
       </div>
       
       <div className="flex items-center space-x-4">
+        <Button variant="ghost" size="icon" className="text-reed-secondary">
+          <Bell className="h-5 w-5" />
+        </Button>
+        <Button variant="ghost" size="icon" className="text-reed-secondary">
+          <HelpCircle className="h-5 w-5" />
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="bg-amazon-yellow text-amazon">
+                <AvatarFallback className="bg-reed text-white">
                   <UserIcon className="h-5 w-5" />
                 </AvatarFallback>
               </Avatar>
@@ -48,8 +54,9 @@ const Header = ({ user }: HeaderProps) => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem>My Account</DropdownMenuItem>
+            <DropdownMenuItem>Employer Dashboard</DropdownMenuItem>
+            <DropdownMenuItem>Manage Adverts</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Sign out</DropdownMenuItem>
           </DropdownMenuContent>
