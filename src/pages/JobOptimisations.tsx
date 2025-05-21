@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -397,7 +396,7 @@ const JobOptimisations = () => {
                   </CardHeader>
                   <CardContent className="bg-white pt-4">
                     <div className="flex flex-col items-center text-center">
-                      <div className="text-4xl font-bold text-reed mb-3">+45%</div>
+                      <div className="text-4xl font-bold text-black mb-3">+45%</div>
                       <p className="text-gray-600 mb-3 text-sm">Applications when salary is clearly stated</p>
                       <Badge variant="outline" className={`${getStatusColors(optimizations.salary.status).buttonBg} ${getStatusColors(optimizations.salary.status).buttonText}`}>
                         {optimizations.salary.action}
@@ -418,7 +417,7 @@ const JobOptimisations = () => {
                   </CardHeader>
                   <CardContent className="bg-white pt-4">
                     <div className="flex flex-col items-center text-center">
-                      <div className="text-4xl font-bold text-reed mb-3">+30%</div>
+                      <div className="text-4xl font-bold text-black mb-3">+30%</div>
                       <p className="text-gray-600 mb-3 text-sm">Applications with specific location</p>
                       <Badge variant="outline" className={`${getStatusColors(optimizations.location.status).buttonBg} ${getStatusColors(optimizations.location.status).buttonText}`}>
                         {optimizations.location.action}
@@ -439,7 +438,7 @@ const JobOptimisations = () => {
                   </CardHeader>
                   <CardContent className="bg-white pt-4">
                     <div className="flex flex-col items-center text-center">
-                      <div className="text-4xl font-bold text-reed mb-3">+65%</div>
+                      <div className="text-4xl font-bold text-black mb-3">+65%</div>
                       <p className="text-gray-600 mb-3 text-sm">View rate with optimised title</p>
                       <Badge variant="outline" className={`${getStatusColors(optimizations.jobTitle.status).buttonBg} ${getStatusColors(optimizations.jobTitle.status).buttonText}`}>
                         {optimizations.jobTitle.action}

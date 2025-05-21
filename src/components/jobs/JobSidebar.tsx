@@ -32,7 +32,7 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
       </div>
       
       <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <div className="px-2 pt-2 bg-white">
+        <div className="px-2 pt-2 bg-white border-b">
           <TabsList className="w-full justify-start overflow-x-auto">
             {sectors.map((sector) => (
               <TabsTrigger key={sector} value={sector} className="whitespace-nowrap">
