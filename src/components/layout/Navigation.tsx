@@ -9,7 +9,7 @@ const Navigation = () => {
   return (
     <div className="bg-reed-light py-6 px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-reed-secondary mb-4">Welcome to your recruiter dashboard</h1>
+        <h1 className="text-2xl font-bold text-reed-secondary mb-4">Welcome to your recruiter portal</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Link to="/jobs/new">
