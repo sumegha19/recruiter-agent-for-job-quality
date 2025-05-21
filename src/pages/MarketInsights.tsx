@@ -1,10 +1,9 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBar } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBar, ArrowLeft } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import { Button } from "@/components/ui/button";
 import { currentUser } from '@/data/mockData';
@@ -49,6 +48,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const MarketInsights = () => {
+  const navigate = useNavigate();
   const selectSector = "IT & Telecom";
   
   const sectorMetrics = {
@@ -66,11 +66,25 @@ const MarketInsights = () => {
     demandIndexTrend: "+1.2",
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header user={currentUser} />
       
       <div className="flex-1 p-6 max-w-7xl mx-auto w-full">
+        {/* Go Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={handleGoBack} 
+          className="mb-4 hover:bg-gray-100 -ml-2"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+        
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <div>
             <h1 className="text-2xl font-bold text-reed-secondary mb-1">Market Insights</h1>
