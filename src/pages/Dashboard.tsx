@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [selectedJob, setSelectedJob] = useState<Job | null>(jobs.length > 0 ? jobs[0] : null);
   
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-reed-light">
       <Header user={{...currentUser, company: 'Reed.co.uk'}} />
       <Navigation />
       

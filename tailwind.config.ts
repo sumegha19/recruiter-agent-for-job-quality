@@ -64,11 +64,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				reed: {
-					DEFAULT: '#D71921', // Reed's primary red
-					hover: '#BB151C',   // Darker red for hover states
-					light: '#F8F7F7',   // Light background
-					secondary: '#2D2D2D', // Dark gray for text
-					accent: '#0066CC'    // Blue accent color
+					DEFAULT: '#8B5CF6', // Changed from red to purple
+					hover: '#7E69AB',   // Darker purple for hover states
+					light: '#F8F7FA',   // Light purple tint for background
+					secondary: '#2D2D42', // Dark purple-gray for text
+					accent: '#D946EF'    // Magenta accent color
 				}
 			},
 			borderRadius: {
