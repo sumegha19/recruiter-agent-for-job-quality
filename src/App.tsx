@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NewJob from "./pages/NewJob";
 import NotFound from "./pages/NotFound";
 import JobOptimisations from "./pages/JobOptimisations";
+import MarketInsights from "./pages/MarketInsights";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/jobs/new" element={<NewJob />} />
+          <Route path="/jobs/market-insights" element={<MarketInsights />} />
           <Route path="/jobs/:jobId/optimisations" element={<JobOptimisations />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

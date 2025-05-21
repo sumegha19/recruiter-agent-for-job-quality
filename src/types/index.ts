@@ -9,6 +9,24 @@ export interface Job {
   requirements: string[];
   datePosted: string;
   isQualityDescription: boolean;
+  optimizationStatus?: {
+    salary: 'red' | 'amber' | 'green';
+    location: 'red' | 'amber' | 'green';
+    jobTitle: 'red' | 'amber' | 'green';
+  };
+  stats?: {
+    timeToFirstApplication: PerformanceMetric;
+    applicationsPerVacancy: PerformanceMetric;
+    firstWeekApplications: PerformanceMetric;
+    conversionRate: PerformanceMetric;
+  };
+}
+
+export interface PerformanceMetric {
+  value: string | number;
+  change: number;
+  benchmark: string | number;
+  chartData: { name: string; value: number }[];
 }
 
 export interface Suggestion {

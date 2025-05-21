@@ -12,7 +12,7 @@ const Navigation = () => {
         <h1 className="text-2xl font-bold text-reed-secondary mb-4">Welcome to your recruiter portal</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link to="/jobs/new">
+          <Link to="/jobs/market-insights">
             <Card className="bg-white hover:shadow-md transition-shadow cursor-pointer border-t-4 border-t-reed h-full">
               <CardContent className="flex items-start p-6">
                 <div className="flex-1">
@@ -67,3 +67,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
