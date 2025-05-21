@@ -26,15 +26,6 @@ const positionTrends = [
   { name: 'Security', values: 18.9, fill: '#A855F7' },
 ];
 
-const skillDemand = [
-  { name: 'Jan', React: 62, Python: 48, AWS: 54 },
-  { name: 'Feb', React: 58, Python: 52, AWS: 51 },
-  { name: 'Mar', React: 65, Python: 55, AWS: 57 },
-  { name: 'Apr', React: 72, Python: 58, AWS: 59 },
-  { name: 'May', React: 78, Python: 64, AWS: 63 },
-  { name: 'Jun', React: 82, Python: 67, AWS: 68 },
-];
-
 // Custom tooltip component for Recharts
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -200,24 +191,6 @@ const MarketInsights = () => {
             </CardContent>
           </Card>
         </div>
-
-        <Card>
-          <CardContent className="pt-6">
-            <h3 className="text-lg font-medium mb-4">Skills in Demand (2023)</h3>
-            <ChartContainer config={{}} className="h-[300px]">
-              <LineChart data={skillDemand} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="name" tickLine={false} axisLine={false} />
-                <YAxis tickLine={false} axisLine={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend />
-                <Line type="monotone" dataKey="React" stroke="#8B5CF6" strokeWidth={2} />
-                <Line type="monotone" dataKey="Python" stroke="#D946EF" strokeWidth={2} />
-                <Line type="monotone" dataKey="AWS" stroke="#A855F7" strokeWidth={2} />
-              </LineChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
@@ -262,4 +235,3 @@ const MetricCard = ({ title, value, trend, trendPositive, icon, info }: MetricCa
 };
 
 export default MarketInsights;
-
