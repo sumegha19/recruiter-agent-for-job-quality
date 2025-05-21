@@ -19,7 +19,7 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
   
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="p-4 border-b bg-reed-light">
+      <div className="p-4 border-b bg-white">
         <h3 className="font-semibold text-lg text-reed-secondary">Your Job Listings</h3>
         <div className="relative mt-2">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -45,11 +45,11 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
         {sectors.map((sector) => (
           <TabsContent key={sector} value={sector} className="mt-0 flex-1 flex flex-col">
             <ScrollArea className="flex-1">
-              <div className="p-2 space-y-2">
+              <div className="p-0">
                 {getJobsBySector(sector).map((job) => (
                   <div 
                     key={job.id} 
-                    className={`p-3 rounded-md cursor-pointer border-l-4 ${selectedJobId === job.id 
+                    className={`p-3 cursor-pointer border-l-4 ${selectedJobId === job.id 
                       ? 'bg-reed-light border-l-reed text-reed-secondary' 
                       : 'border-l-transparent hover:bg-gray-50 hover:border-l-reed/50'}`}
                     onClick={() => onSelectJob(job)}
