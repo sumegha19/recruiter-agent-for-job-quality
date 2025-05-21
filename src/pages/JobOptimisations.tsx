@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +22,8 @@ import {
   TrendingDown, 
   Activity, 
   Calendar,
-  MoveHorizontal
+  MoveHorizontal,
+  ExternalLink
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart as RechartsBarChart, Bar, Legend } from 'recharts';
 import { Job } from '@/types';
@@ -188,9 +190,17 @@ const JobOptimisations = () => {
           
           <ResizablePanel defaultSize={80} className="overflow-y-auto">
             <div className="p-6">
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-reed-secondary">Optimisations for: {job.title}</h1>
-                <p className="text-gray-600">{job.company} • {job.location}</p>
+              <div className="mb-6 flex justify-between items-center">
+                <div>
+                  <h1 className="text-2xl font-bold text-reed-secondary">Optimisations for: {job.title}</h1>
+                  <p className="text-gray-600">{job.company} • {job.location}</p>
+                </div>
+                <Button variant="outline" size="sm" className="flex items-center gap-1" asChild>
+                  <a href="https://www.reed.co.uk/jobs/care-assistant/54973597?source=searchResults&filter=%2Fjobs" target="_blank" rel="noopener noreferrer">
+                    View on Reed.co.uk
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </Button>
               </div>
               
               {/* Performance Metrics Widget */}
