@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer } from "@/components/ui/chart";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
 import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBar } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -34,6 +34,28 @@ const skillDemand = [
   { name: 'May', React: 78, Python: 64, AWS: 63 },
   { name: 'Jun', React: 82, Python: 67, AWS: 68 },
 ];
+
+// Custom tooltip component for Recharts
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-background border border-border/50 p-2 rounded-lg shadow-lg text-xs">
+        <p className="font-medium">{label}</p>
+        {payload.map((item: any, index: number) => (
+          <div key={index} className="flex items-center gap-2 mt-1">
+            <div 
+              className="h-2 w-2 rounded-sm"
+              style={{ backgroundColor: item.color }}
+            />
+            <span className="text-muted-foreground">{item.name}: </span>
+            <span className="font-mono font-medium">{item.value}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 const MarketInsights = () => {
   const selectSector = "IT & Telecom";
@@ -135,9 +157,7 @@ const MarketInsights = () => {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="name" tickLine={false} axisLine={false} />
                   <YAxis tickLine={false} axisLine={false} />
-                  <ChartTooltip 
-                    content={props => <ChartTooltipContent {...props} />} 
-                  />
+                  <Tooltip content={<CustomTooltip />} />
                   <Line 
                     type="monotone" 
                     dataKey="value" 
@@ -169,9 +189,7 @@ const MarketInsights = () => {
                     axisLine={false} 
                     width={100}
                   />
-                  <ChartTooltip 
-                    content={props => <ChartTooltipContent {...props} />} 
-                  />
+                  <Tooltip content={<CustomTooltip />} />
                   <Bar 
                     dataKey="values" 
                     fill="#8B5CF6"
@@ -191,9 +209,7 @@ const MarketInsights = () => {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" tickLine={false} axisLine={false} />
                 <YAxis tickLine={false} axisLine={false} />
-                <ChartTooltip 
-                  content={props => <ChartTooltipContent {...props} />} 
-                />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend />
                 <Line type="monotone" dataKey="React" stroke="#8B5CF6" strokeWidth={2} />
                 <Line type="monotone" dataKey="Python" stroke="#D946EF" strokeWidth={2} />
@@ -246,3 +262,4 @@ const MetricCard = ({ title, value, trend, trendPositive, icon, info }: MetricCa
 };
 
 export default MarketInsights;
+
