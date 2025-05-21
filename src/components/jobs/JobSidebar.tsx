@@ -5,7 +5,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getAllSectors, getJobsBySector } from '@/data/mockData';
 import { Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 interface JobSidebarProps {
   onSelectJob: (job: Job) => void;
@@ -15,18 +14,11 @@ interface JobSidebarProps {
 const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
   const sectors = getAllSectors();
   const [activeTab, setActiveTab] = useState(sectors[0] || '');
-  const navigate = useNavigate();
   
   const jobsBySector = getJobsBySector(activeTab);
   
-  const handleJobClick = (job: Job) => {
-    onSelectJob(job);
-    // Directly navigate to optimisations page when job is clicked
-    navigate(`/jobs/${job.id}/optimisations`);
-  };
-  
   return (
-    <div className="w-full h-full border-r bg-white">
+    <div className="w-full h-full bg-white border-r">
       <div className="p-4 border-b bg-reed-light">
         <h3 className="font-semibold text-lg text-reed-secondary">Your Job Listings</h3>
         <div className="relative mt-2">
@@ -60,7 +52,7 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
                     className={`p-3 rounded-md cursor-pointer border-l-4 ${selectedJobId === job.id 
                       ? 'bg-reed-light border-l-reed text-reed-secondary' 
                       : 'border-l-transparent hover:bg-gray-50 hover:border-l-reed/50'}`}
-                    onClick={() => handleJobClick(job)}
+                    onClick={() => onSelectJob(job)}
                   >
                     <h4 className="font-medium text-reed-secondary">{job.title}</h4>
                     <p className="text-sm text-gray-500 truncate">{job.location}</p>

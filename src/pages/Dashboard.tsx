@@ -23,8 +23,8 @@ const Dashboard = () => {
       <Header user={{...currentUser, company: 'Reed.co.uk'}} />
       <Navigation />
       
-      <div className="flex-1 flex shadow-inner">
-        <div className="w-1/3 max-w-xs border-r">
+      <div className="flex-1 flex">
+        <div className="w-1/4 max-w-xs bg-white">
           <JobSidebar 
             onSelectJob={handleSelectJob} 
             selectedJobId={selectedJob?.id || null} 
