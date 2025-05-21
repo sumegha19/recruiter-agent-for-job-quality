@@ -22,7 +22,7 @@ const Header = ({ user }: HeaderProps) => {
     <header className="w-full bg-white px-6 py-3 flex items-center justify-between border-b shadow-sm">
       <div className="flex items-center gap-2">
         <div className="text-reed font-bold text-3xl mr-2">
-          REED
+          Reed.co.uk
         </div>
         <span className="text-reed-secondary font-medium">Recruiter Portal</span>
       </div>
