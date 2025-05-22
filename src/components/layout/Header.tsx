@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { User } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -23,13 +22,11 @@ const Header = ({ user }: HeaderProps) => {
     <header className="w-full bg-white px-6 py-3 flex items-center justify-between border-b shadow-sm">
       <div className="flex items-center gap-2">
         <div className="mr-2">
-          <Link to="/">
-            <img 
-              src="/lovable-uploads/23ec89e3-a2a3-4e37-91f5-99d0c06f6574.png" 
-              alt="Reed.co.uk Recruiter" 
-              className="h-8 cursor-pointer"
-            />
-          </Link>
+          <img 
+            src="/lovable-uploads/23ec89e3-a2a3-4e37-91f5-99d0c06f6574.png" 
+            alt="Reed.co.uk Recruiter" 
+            className="h-8"
+          />
         </div>
       </div>
       
