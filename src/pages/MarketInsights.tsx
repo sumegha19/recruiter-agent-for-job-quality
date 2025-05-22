@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -154,6 +153,37 @@ const sectorData = {
       demandIndex: "6.5",
       demandIndexTrend: "+0.7",
     }
+  },
+  "Logistics": {
+    marketData: [
+      { name: 'Jan', value: 3400 },
+      { name: 'Feb', value: 3600 },
+      { name: 'Mar', value: 3800 },
+      { name: 'Apr', value: 4200 },
+      { name: 'May', value: 4500 },
+      { name: 'Jun', value: 4700 },
+    ],
+    positionTrends: [
+      { name: 'Drivers', values: 32.8, fill: '#8B5CF6' },
+      { name: 'Warehouse Staff', values: 28.4, fill: '#D946EF' },
+      { name: 'Transport Managers', values: 22.6, fill: '#9333EA' },
+      { name: 'Supply Chain', values: 19.2, fill: '#C084FC' },
+      { name: 'Fleet Managers', values: 15.7, fill: '#A855F7' },
+    ],
+    metrics: {
+      averageSalary: "£36,800",
+      salaryTrend: "+3.2%", 
+      openPositions: "15,426",
+      positionsTrend: "+8.4%",
+      applicationRate: "19.2",
+      applicationTrend: "+2.1%",
+      timeToFill: "25",
+      timeToFillTrend: "-3.6%",
+      talentPool: "108,540",
+      talentPoolTrend: "+4.8%",
+      demandIndex: "7.2",
+      demandIndexTrend: "+1.4",
+    }
   }
 };
 
@@ -161,7 +191,8 @@ const suggestedQuestions = [
   "What are the hiring trends for Software Engineers in the IT sector?",
   "Show market insights for Healthcare and nursing positions",
   "What's the average salary for Financial Analysts in London?",
-  "Compare retail management roles across different regions"
+  "Compare retail management roles across different regions",
+  "What are the trends for Drivers in the Logistics sector?"
 ];
 
 // Custom tooltip component for Recharts
@@ -241,8 +272,18 @@ const jobSectorMapping = {
     "online retail", "visual merchandiser", "product demonstrator", "telemarketer",
     "retail assistant", "shop assistant", "sales consultant", "brand ambassador",
     "key account manager", "category manager",
-    // Added logistics-related roles that are often associated with retail supply chain
-    "driver", "warehouse operator", "logistics"
+    // Other retail-related roles
+    "logistics"
+  ],
+  
+  // Logistics - ISCO Major Group 8 (Plant and machine operators and assemblers - 83) and related
+  "Logistics": [
+    "driver", "warehouse operator", "transport", "shipping", "freight", 
+    "courier", "delivery", "trucker", "haulage", "fleet", "distribution",
+    "warehouse manager", "logistics coordinator", "supply chain manager",
+    "inventory controller", "forklift operator", "picker", "packer",
+    "loading", "unloading", "cargo", "import", "export", "customs",
+    "transportation", "dispatch", "logistics manager", "operations"
   ]
 };
 
@@ -267,7 +308,8 @@ const MarketInsights = () => {
       "IT & Telecom": 0,
       "Healthcare": 0, 
       "Finance": 0,
-      "Retail": 0
+      "Retail": 0,
+      "Logistics": 0
     };
     
     // Calculate match scores for each sector based on keyword frequency
