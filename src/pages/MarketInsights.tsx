@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -186,6 +185,64 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+// ISCO-based job classification for sector detection
+const jobSectorMapping = {
+  // IT & Telecom - ISCO Major Group 2 (Professionals) and relevant subgroups
+  "IT & Telecom": [
+    // Software and applications developers and analysts - 251
+    "software", "developer", "programmer", "web developer", "app developer", 
+    "frontend", "backend", "full stack", "mobile developer", "game developer",
+    "devops", "software engineer", "systems analyst", "qa engineer", "tester",
+    // Database and network professionals - 252
+    "database", "network administrator", "system administrator", "cloud engineer", 
+    "security analyst", "cybersecurity", "information security", "network engineer",
+    // ICT professionals - 25
+    "it", "ict", "tech", "technology", "tech support", "computer", "digital", "data science",
+    "data analyst", "data engineer", "machine learning", "artificial intelligence", "ai engineer",
+    "telecommunications", "telecom", "hardware engineer", "support specialist",
+    "it project manager", "scrum master", "product owner", "ux designer", "ui designer"
+  ],
+  
+  // Healthcare - ISCO Major Group 2 (Health Professionals - 22) and Group 3 (Health Associate Professionals - 32)
+  "Healthcare": [
+    // Health professionals - 22
+    "doctor", "physician", "surgeon", "specialist", "medical", "dentist", "pharmacist",
+    "psychiatrist", "psychologist", "therapist", "optometrist", "dietitian",
+    // Nursing and midwifery professionals - 222
+    "nurse", "midwife", "registered nurse", "nurse practitioner", "clinical nurse",
+    // Health associate professionals - 32
+    "healthcare", "health care", "medical technician", "laboratory technician", "paramedic",
+    "ambulance", "dental assistant", "pharmacy technician", "physiotherapy", "radiology",
+    "radiographer", "ultrasound", "hospital", "clinic", "care worker", "caregiver",
+    "home health aide", "nursing assistant", "medical assistant", "phlebotomist"
+  ],
+  
+  // Finance - ISCO Major Group 2 (Business and administration professionals - 24) and Group 3 (Business and administration associate professionals - 33)
+  "Finance": [
+    // Finance professionals - 241
+    "finance", "financial", "accountant", "auditor", "financial analyst", "investment", 
+    "banker", "bank", "banking", "treasurer", "financial adviser", "financial planner",
+    "insurance", "actuary", "underwriter", "loan officer", "credit analyst",
+    "financial manager", "finance director", "chief financial officer", "cfo",
+    "economist", "financial examiner", "tax", "bookkeeper", "payroll",
+    "trading", "trader", "wealth management", "equity analyst", "risk analyst",
+    "compliance", "securities", "broker", "mortgage", "budget"
+  ],
+  
+  // Retail - ISCO Major Group 5 (Service and sales workers - 52) and related
+  "Retail": [
+    // Sales workers - 52
+    "retail", "sales", "store", "shop", "merchandiser", "cashier", "clerk",
+    "sales associate", "sales representative", "sales manager", "store manager",
+    "retail manager", "assistant manager", "department manager", "buyer",
+    "purchasing", "procurement", "inventory", "stock", "supply chain",
+    "customer service", "customer advisor", "shopping", "checkout", "e-commerce",
+    "online retail", "visual merchandiser", "product demonstrator", "telemarketer",
+    "retail assistant", "shop assistant", "sales consultant", "brand ambassador",
+    "key account manager", "category manager"
+  ]
+};
+
 const MarketInsights = () => {
   const navigate = useNavigate();
   const [selectedSector, setSelectedSector] = useState("IT & Telecom");
@@ -196,30 +253,50 @@ const MarketInsights = () => {
   const [marketData, setMarketData] = useState(sectorData["IT & Telecom"].marketData);
   const [positionTrends, setPositionTrends] = useState(sectorData["IT & Telecom"].positionTrends);
   
-  // Function to detect sector from query
+  // Enhanced function to detect sector from query using ISCO-based job classification
   const detectSector = (query: string): string | null => {
-    const query_lower = query.toLowerCase();
+    if (!query.trim()) return null;
     
-    if (query_lower.includes("software") || query_lower.includes("developer") || 
-        query_lower.includes("programmer") || query_lower.includes("it") || 
-        query_lower.includes("tech") || query_lower.includes("web") ||
-        query_lower.includes("devops") || query_lower.includes("data science")) {
-      return "IT & Telecom";
-    } else if (query_lower.includes("nurse") || query_lower.includes("doctor") || 
-              query_lower.includes("healthcare") || query_lower.includes("medical") || 
-              query_lower.includes("hospital") || query_lower.includes("clinic")) {
-      return "Healthcare";
-    } else if (query_lower.includes("finance") || query_lower.includes("bank") || 
-              query_lower.includes("accountant") || query_lower.includes("financial") ||
-              query_lower.includes("analyst") || query_lower.includes("investment")) {
-      return "Finance";
-    } else if (query_lower.includes("retail") || query_lower.includes("store") || 
-              query_lower.includes("sales") || query_lower.includes("shop") ||
-              query_lower.includes("merchandiser") || query_lower.includes("cashier")) {
-      return "Retail";
-    }
+    const queryLower = query.toLowerCase();
     
-    return null;
+    // Match query against each sector's keyword list based on ISCO classifications
+    const matchScores: Record<string, number> = {
+      "IT & Telecom": 0,
+      "Healthcare": 0, 
+      "Finance": 0,
+      "Retail": 0
+    };
+    
+    // Calculate match scores for each sector based on keyword frequency
+    Object.entries(jobSectorMapping).forEach(([sector, keywords]) => {
+      keywords.forEach(keyword => {
+        if (queryLower.includes(keyword.toLowerCase())) {
+          // Increase score based on keyword match
+          matchScores[sector] += 1;
+          
+          // Give more weight to exact job title matches
+          if (queryLower === keyword.toLowerCase() || 
+              queryLower.startsWith(keyword.toLowerCase() + " ") || 
+              queryLower.endsWith(" " + keyword.toLowerCase())) {
+            matchScores[sector] += 2;
+          }
+        }
+      });
+    });
+    
+    // Find the sector with the highest match score
+    let bestMatch: string | null = null;
+    let highestScore = 0;
+    
+    Object.entries(matchScores).forEach(([sector, score]) => {
+      if (score > highestScore) {
+        highestScore = score;
+        bestMatch = sector;
+      }
+    });
+    
+    // Only return a match if the score is above a threshold
+    return highestScore > 0 ? bestMatch : null;
   };
 
   // Function to update dashboard based on detected sector
@@ -280,9 +357,7 @@ const MarketInsights = () => {
   };
 
   const handleInputFocus = () => {
-    if (!searchQuery.trim()) {
-      setShowSuggestions(true);
-    }
+    setShowSuggestions(true);
   };
 
   const handleClearSearch = () => {
