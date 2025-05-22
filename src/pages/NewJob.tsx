@@ -20,7 +20,6 @@ const NewJob = () => {
   const [location, setLocation] = useState("");
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
-  const [requirements, setRequirements] = useState("");
   
   const { toast } = useToast();
 
@@ -195,17 +194,6 @@ Perks & Benefits
                   className="min-h-[150px]"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="requirements">Requirements</Label>
-                <Textarea 
-                  id="requirements" 
-                  placeholder="List key skills and qualifications, one per line..." 
-                  className="min-h-[100px]"
-                  value={requirements}
-                  onChange={(e) => setRequirements(e.target.value)}
                 />
               </div>
             </div>
