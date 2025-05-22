@@ -654,13 +654,13 @@ const AIHatIcon = () => {
   );
 };
 
-// Brain AI Icon - slightly larger and more prominent for the center of the card
+// Brain AI Icon - slightly more compact to match other metric cards
 const BrainAIIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="36"
-      height="36"
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -725,22 +725,24 @@ const MetricCard = ({ title, value, trend, trendPositive, icon, info, isAIEnable
   );
 };
 
-// AI Insights Card Component - Made more uniform with other cards
+// AI Insights Card Component - Updated to match other metric cards in size and font
 const AIInsightsCard = ({ onClick }: { onClick: () => void }) => {
   return (
     <Card 
       className="overflow-hidden ai-animated-border relative cursor-pointer hover:shadow-md transition-shadow h-full" 
       onClick={onClick}
     >
-      <CardContent className="p-6 flex flex-col items-center justify-center h-full">
-        <div className="rounded-full bg-gradient-to-br from-purple-600 to-pink-500 p-4 shadow-lg mb-3">
-          <BrainAIIcon />
+      <CardContent className="p-6 h-full flex flex-col justify-between">
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground mb-1">Wider Market Insights</p>
+            <h3 className="text-2xl font-bold">AI-powered</h3>
+            <p className="text-xs text-muted-foreground mt-1">Click for detailed analysis</p>
+          </div>
+          <div className="rounded-full bg-gradient-to-br from-purple-600 to-pink-500 p-2">
+            <BrainAIIcon />
+          </div>
         </div>
-        <h3 className="text-lg font-medium text-center mb-1">Wider Market Insights</h3>
-        <p className="text-sm text-muted-foreground text-center">AI-powered analysis</p>
-        <Button variant="link" size="sm" className="mt-2">
-          View full report
-        </Button>
       </CardContent>
     </Card>
   );
