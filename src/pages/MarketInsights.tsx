@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -190,7 +191,7 @@ const MarketInsights = () => {
   const [selectedSector, setSelectedSector] = useState("IT & Telecom");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [sectorMetrics, setSectorMetrics] = useState(sectorData["IT & Telecom"].metrics);
   const [marketData, setMarketData] = useState(sectorData["IT & Telecom"].marketData);
   const [positionTrends, setPositionTrends] = useState(sectorData["IT & Telecom"].positionTrends);
@@ -223,7 +224,7 @@ const MarketInsights = () => {
 
   // Function to update dashboard based on detected sector
   const updateDashboardForSector = useCallback((sector: string | null) => {
-    if (sector) {
+    if (sector && sectorData[sector]) {
       setSelectedSector(sector);
       setSectorMetrics(sectorData[sector].metrics);
       setMarketData(sectorData[sector].marketData);
@@ -248,7 +249,7 @@ const MarketInsights = () => {
     if (!query.trim()) return;
     
     setIsSearching(true);
-    setPopoverOpen(false);
+    setShowSuggestions(false);
     
     // Simulate API request with a timeout
     setTimeout(() => {
@@ -261,8 +262,11 @@ const MarketInsights = () => {
   // Handle question selection from suggestions
   const handleQuestionSelect = (question: string) => {
     setSearchQuery(question);
-    setPopoverOpen(false);
-    handleSearch(question);
+    setShowSuggestions(false);
+    
+    // Process the selected question immediately
+    const detectedSector = detectSector(question);
+    updateDashboardForSector(detectedSector);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -273,6 +277,17 @@ const MarketInsights = () => {
 
   const handleGoHome = () => {
     navigate('/');
+  };
+
+  const handleInputFocus = () => {
+    if (!searchQuery.trim()) {
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setShowSuggestions(true);
   };
 
   return (
@@ -293,56 +308,63 @@ const MarketInsights = () => {
         {/* Intelligent Search Input */}
         <HoverCard>
           <HoverCardTrigger asChild>
-            <div className="mb-6">
-              <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                <PopoverTrigger asChild>
-                  <div className="bg-gray-100 rounded-lg p-4 flex items-center shadow-sm border border-gray-200 hover:border-gray-300 focus-within:ring-2 focus-within:ring-reed/40">
-                    <Search className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
-                    <Input
-                      placeholder="What job are you looking to post? (e.g., Software Engineer, Registered Nurse, Financial Analyst)"
-                      className="border-0 focus-visible:ring-0 focus:ring-0 focus-visible:ring-offset-0 shadow-none bg-transparent placeholder:text-gray-400 text-sm flex-1"
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        setPopoverOpen(true);
-                      }}
-                      onKeyDown={handleKeyDown}
-                      onFocus={() => setPopoverOpen(true)}
-                    />
-                    {isSearching && (
-                      <div className="w-4 h-4 rounded-full border-2 border-reed border-t-transparent animate-spin ml-2"></div>
-                    )}
-                    {!isSearching && searchQuery && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 text-gray-400 hover:text-gray-500"
-                        onClick={() => setSearchQuery("")}
-                      >
-                        ✕
-                      </Button>
-                    )}
+            <div className="mb-6 relative">
+              <div 
+                className="bg-gray-100 rounded-lg p-4 flex items-center shadow-sm border border-gray-200 hover:border-gray-300 focus-within:ring-2 focus-within:ring-reed/40"
+                onClick={() => setShowSuggestions(true)}
+              >
+                <Search className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
+                <Input
+                  placeholder="What job are you looking to post? (e.g., Software Engineer, Registered Nurse, Financial Analyst)"
+                  className="border-0 focus-visible:ring-0 focus:ring-0 focus-visible:ring-offset-0 shadow-none bg-transparent placeholder:text-gray-400 text-sm flex-1"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    if (e.target.value.trim()) {
+                      setShowSuggestions(false);
+                    } else {
+                      setShowSuggestions(true);
+                    }
+                  }}
+                  onKeyDown={handleKeyDown}
+                  onFocus={handleInputFocus}
+                />
+                {isSearching && (
+                  <div className="w-4 h-4 rounded-full border-2 border-reed border-t-transparent animate-spin ml-2"></div>
+                )}
+                {!isSearching && searchQuery && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 text-gray-400 hover:text-gray-500"
+                    onClick={handleClearSearch}
+                    type="button"
+                  >
+                    ✕
+                  </Button>
+                )}
+              </div>
+              
+              {/* Suggestions dropdown */}
+              {showSuggestions && (
+                <div className="absolute z-50 bg-white w-full mt-1 rounded-md shadow-lg border border-gray-200">
+                  <div className="p-2">
+                    <h4 className="text-sm font-medium text-gray-500 px-2 py-1">Suggested Questions</h4>
+                    <ul className="py-1">
+                      {suggestedQuestions.map((question, index) => (
+                        <li 
+                          key={index}
+                          className="px-2 py-2 hover:bg-gray-100 cursor-pointer rounded text-sm flex items-start"
+                          onClick={() => handleQuestionSelect(question)}
+                        >
+                          <span className="text-reed mr-2">•</span>
+                          {question}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0 shadow-lg border-gray-200" align="start" sideOffset={4}>
-                  <Command>
-                    <CommandList>
-                      <CommandGroup heading="Suggested Questions">
-                        {suggestedQuestions.map((question, index) => (
-                          <CommandItem
-                            key={index}
-                            onSelect={() => handleQuestionSelect(question)}
-                            className="flex items-start cursor-pointer"
-                          >
-                            <span className="text-reed mr-2">•</span>
-                            {question}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                </div>
+              )}
             </div>
           </HoverCardTrigger>
           <HoverCardContent className="w-80">
@@ -357,6 +379,7 @@ const MarketInsights = () => {
           </HoverCardContent>
         </HoverCard>
         
+        {/* Page title and continue button */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
           <div>
             <h1 className="text-2xl font-bold text-reed-secondary mb-1">Market Insights</h1>
