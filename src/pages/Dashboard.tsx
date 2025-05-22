@@ -1,19 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { currentUser, jobs } from '@/data/mockData';
-import { getAllCandidates, getCandidatesForJob } from '@/data/mockCandidates';
+import { getAllCandidates } from '@/data/mockCandidates';
 import Header from '@/components/layout/Header';
-import Navigation from '@/components/layout/Navigation';
-import JobSidebar from '@/components/jobs/JobSidebar';
-import CandidatesList from '@/components/jobs/CandidatesList';
-import { Job } from '@/types';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useNavigate, useLocation } from 'react-router-dom';
+import CandidatesList from '@/components/jobs/CandidatesList';
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { Users, ChevronRight } from 'lucide-react';
+import { Plus, Briefcase, User, ChevronRight } from "lucide-react";
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [selectedJob, setSelectedJob] = useState<Job | null>(jobs.length > 0 ? jobs[0] : null);
   const [showCandidates, setShowCandidates] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,13 +23,6 @@ const Dashboard = () => {
     }
   }, [location.search]);
   
-  const handleSelectJob = (job: Job) => {
-    setSelectedJob(job);
-    setShowCandidates(false);
-    // Navigate to the optimisations page directly
-    navigate(`/jobs/${job.id}/optimisations`);
-  };
-  
   const handleViewCandidates = () => {
     setShowCandidates(true);
   };
@@ -41,61 +31,81 @@ const Dashboard = () => {
     setShowCandidates(false);
   };
   
-  // Get candidates for the selected job or all candidates if no job is selected
-  const candidates = selectedJob 
-    ? getCandidatesForJob(selectedJob.id, jobs)
-    : getAllCandidates(jobs);
+  // Get all candidates for all jobs
+  const candidates = getAllCandidates(jobs);
   
   return (
     <div className="min-h-screen flex flex-col bg-reed-light">
       <Header user={{...currentUser, company: 'Reed.co.uk'}} />
-      <Navigation />
       
-      <div className="flex-1 flex">
-        <div className="w-1/4 max-w-xs bg-white">
-          <JobSidebar 
-            onSelectJob={handleSelectJob} 
-            selectedJobId={selectedJob?.id || null} 
+      {showCandidates ? (
+        <div className="flex-1">
+          <CandidatesList 
+            candidates={candidates} 
+            onClose={handleCloseCandidates}
+            jobs={jobs}
           />
         </div>
-        <div className="flex-1 p-6">
-          {showCandidates ? (
-            <CandidatesList 
-              candidates={candidates} 
-              onClose={handleCloseCandidates} 
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full">
-              <div className="text-center max-w-md">
-                <h2 className="text-2xl font-medium text-reed-secondary mb-4">
-                  Welcome to your Recruitment Dashboard
-                </h2>
-                <p className="text-gray-600 mb-8">
-                  Manage your job listings, view candidates, and get AI-powered optimization suggestions to improve your job descriptions.
-                </p>
-                <div className="flex flex-col gap-4">
-                  <Button 
-                    className="bg-reed hover:bg-reed-hover flex items-center justify-center gap-2 w-full"
-                    onClick={handleViewCandidates}
-                  >
-                    <Users className="h-5 w-5" />
-                    View Candidates
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center justify-center gap-2 w-full"
-                    onClick={() => selectedJob && navigate(`/jobs/${selectedJob.id}/optimisations`)}
-                    disabled={!selectedJob}
-                  >
-                    Job Optimisations
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
+      ) : (
+        <div className="bg-reed-light py-6 px-8 flex-1">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-2xl font-bold text-reed-secondary mb-4">Welcome to your recruiter portal</h1>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Link to="/jobs/market-insights">
+                <Card className="bg-white hover:shadow-md transition-shadow cursor-pointer border-t-4 border-t-reed h-full">
+                  <CardContent className="flex items-start p-6">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg text-reed-secondary mb-2">Post a new job</h3>
+                      <p className="text-sm text-gray-500 mb-4">Create a new job listing and reach thousands of candidates.</p>
+                      <Button variant="outline" className="text-reed hover:text-white hover:bg-reed">
+                        Post job <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                    <div className="rounded-full bg-reed/10 p-3">
+                      <Plus className="h-6 w-6 text-reed" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              
+              <Link to="/jobs/job1/optimisations">
+                <Card className="bg-white hover:shadow-md transition-shadow cursor-pointer border-t-4 border-t-reed h-full">
+                  <CardContent className="flex items-start p-6">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg text-reed-secondary mb-2">Manage job listings</h3>
+                      <p className="text-sm text-gray-500 mb-4">Review and optimize your existing job postings.</p>
+                      <Button variant="outline" className="text-reed hover:text-white hover:bg-reed">
+                        View jobs <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                    <div className="rounded-full bg-reed/10 p-3">
+                      <Briefcase className="h-6 w-6 text-reed" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              
+              <div onClick={handleViewCandidates}>
+                <Card className="bg-white hover:shadow-md transition-shadow cursor-pointer border-t-4 border-t-reed-accent h-full">
+                  <CardContent className="flex items-start p-6">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg text-reed-secondary mb-2">Candidate management</h3>
+                      <p className="text-sm text-gray-500 mb-4">Review applications and manage your talent pipeline.</p>
+                      <Button variant="outline" className="text-reed-accent hover:text-white hover:bg-reed-accent">
+                        View candidates <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                    <div className="rounded-full bg-reed-accent/10 p-3">
+                      <User className="h-6 w-6 text-reed-accent" />
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

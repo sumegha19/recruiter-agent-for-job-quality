@@ -92,15 +92,23 @@ const MarketInsights = () => {
       <Header user={currentUser} />
       
       <div className="flex-1 p-6 max-w-7xl mx-auto w-full">
-        {/* Go Back Button - Updated to go to homepage */}
-        <Button 
-          variant="ghost" 
-          onClick={handleGoHome} 
-          className="mb-4 hover:bg-gray-100 -ml-2"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
+        {/* Navigation Buttons */}
+        <div className="flex justify-between items-center mb-4">
+          <Button 
+            variant="ghost" 
+            onClick={handleGoHome} 
+            className="hover:bg-gray-100 -ml-2"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+          
+          <Link to="/jobs/new">
+            <Button className="bg-reed hover:bg-reed-hover">
+              Continue to Job Post
+            </Button>
+          </Link>
+        </div>
         
         {/* Message Bubble/Prompt with HoverCard and Popover */}
         <HoverCard>
@@ -158,14 +166,6 @@ const MarketInsights = () => {
           <div>
             <h1 className="text-2xl font-bold text-reed-secondary mb-1">Market Insights</h1>
             <p className="text-muted-foreground">Current trends in {selectSector} sector</p>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Link to="/jobs/new">
-              <Button className="bg-reed hover:bg-reed-hover">
-                Continue to Job Post
-              </Button>
-            </Link>
           </div>
         </div>
 

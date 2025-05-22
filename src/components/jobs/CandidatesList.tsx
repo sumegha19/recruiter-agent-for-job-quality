@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Candidate } from '@/data/mockCandidates';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { ChevronRight, Mail, Phone, Calendar, MapPin, Briefcase, GraduationCap, CheckCircle } from 'lucide-react';
+import { Job } from '@/types';
 
 interface CandidatesListProps {
   candidates: Candidate[];
   onClose: () => void;
+  jobs: Job[];
 }
 
 // Format status for display
@@ -53,9 +55,31 @@ const getInitials = (name: string): string => {
     .join('');
 };
 
-const CandidatesList = ({ candidates, onClose }: CandidatesListProps) => {
-  // Group candidates by status
-  const candidatesByStatus = candidates.reduce((acc, candidate) => {
+const CandidatesList = ({ candidates, onClose, jobs }: CandidatesListProps) => {
+  const [selectedJobId, setSelectedJobId] = useState<string | 'all'>('all');
+  
+  // Group candidates by job
+  const candidatesByJob = candidates.reduce((acc, candidate) => {
+    if (!acc[candidate.jobId]) {
+      acc[candidate.jobId] = [];
+    }
+    acc[candidate.jobId].push(candidate);
+    return acc;
+  }, {} as Record<string, Candidate[]>);
+  
+  // Get job title by job ID
+  const getJobTitle = (jobId: string): string => {
+    const job = jobs.find(j => j.id === jobId);
+    return job ? job.title : 'Unknown Job';
+  };
+  
+  // Filter candidates based on selected job
+  const filteredCandidates = selectedJobId === 'all' 
+    ? candidates 
+    : candidatesByJob[selectedJobId] || [];
+  
+  // Group candidates by status for the selected job
+  const candidatesByStatus = filteredCandidates.reduce((acc, candidate) => {
     const status = candidate.status;
     if (!acc[status]) {
       acc[status] = [];
@@ -64,7 +88,7 @@ const CandidatesList = ({ candidates, onClose }: CandidatesListProps) => {
     return acc;
   }, {} as Record<Candidate['status'], Candidate[]>);
 
-  // Count candidates by status
+  // Count candidates by status for the selected job
   const statusCounts = {
     uncontacted: candidatesByStatus.uncontacted?.length || 0,
     contacted: candidatesByStatus.contacted?.length || 0,
@@ -85,17 +109,50 @@ const CandidatesList = ({ candidates, onClose }: CandidatesListProps) => {
         </Button>
       </div>
 
+      {/* Job Selection */}
+      <Card className="mb-6">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg">Select Job</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            <Button 
+              variant={selectedJobId === 'all' ? 'default' : 'outline'} 
+              onClick={() => setSelectedJobId('all')}
+              className="mb-2"
+            >
+              All Jobs ({candidates.length})
+            </Button>
+            
+            {Object.keys(candidatesByJob).map(jobId => (
+              <Button 
+                key={jobId} 
+                variant={selectedJobId === jobId ? 'default' : 'outline'} 
+                onClick={() => setSelectedJobId(jobId)}
+                className="mb-2"
+              >
+                {getJobTitle(jobId)} ({candidatesByJob[jobId].length})
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid grid-cols-1 gap-6">
         {/* Pipeline Overview */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Hiring Pipeline</CardTitle>
+            <CardTitle className="text-lg">
+              {selectedJobId === 'all' 
+                ? 'Hiring Pipeline - All Jobs' 
+                : `Hiring Pipeline - ${getJobTitle(selectedJobId)}`}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <div className="text-sm font-medium">All Candidates</div>
-                <div className="text-sm font-medium">{candidates.length}</div>
+                <div className="text-sm font-medium">{filteredCandidates.length}</div>
               </div>
               <div className="grid grid-cols-4 gap-4">
                 <div className="bg-white p-3 rounded-lg border shadow-sm">
@@ -139,8 +196,8 @@ const CandidatesList = ({ candidates, onClose }: CandidatesListProps) => {
 
         {/* Candidates by Status */}
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="all">All Candidates ({candidates.length})</TabsTrigger>
+          <TabsList className="mb-4 flex flex-wrap">
+            <TabsTrigger value="all">All Candidates ({filteredCandidates.length})</TabsTrigger>
             {Object.entries(statusCounts).map(([status, count]) => (
               count > 0 && (
                 <TabsTrigger key={status} value={status}>
@@ -151,15 +208,23 @@ const CandidatesList = ({ candidates, onClose }: CandidatesListProps) => {
           </TabsList>
 
           <TabsContent value="all" className="space-y-4">
-            {candidates.map(candidate => (
-              <CandidateCard key={candidate.id} candidate={candidate} />
+            {filteredCandidates.map(candidate => (
+              <CandidateCard 
+                key={candidate.id} 
+                candidate={candidate} 
+                jobTitle={getJobTitle(candidate.jobId)} 
+              />
             ))}
           </TabsContent>
 
           {Object.entries(candidatesByStatus).map(([status, statusCandidates]) => (
             <TabsContent key={status} value={status} className="space-y-4">
               {statusCandidates.map(candidate => (
-                <CandidateCard key={candidate.id} candidate={candidate} />
+                <CandidateCard 
+                  key={candidate.id} 
+                  candidate={candidate} 
+                  jobTitle={getJobTitle(candidate.jobId)} 
+                />
               ))}
             </TabsContent>
           ))}
@@ -170,7 +235,7 @@ const CandidatesList = ({ candidates, onClose }: CandidatesListProps) => {
 };
 
 // Individual candidate card component
-const CandidateCard = ({ candidate }: { candidate: Candidate }) => {
+const CandidateCard = ({ candidate, jobTitle }: { candidate: Candidate; jobTitle: string }) => {
   return (
     <Card className="overflow-hidden">
       <div className="flex flex-col md:flex-row">
@@ -185,7 +250,10 @@ const CandidateCard = ({ candidate }: { candidate: Candidate }) => {
           <div className="flex-grow space-y-4">
             <div>
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold text-reed-secondary">{candidate.name}</h3>
+                <div>
+                  <h3 className="text-xl font-semibold text-reed-secondary">{candidate.name}</h3>
+                  <p className="text-sm text-gray-600">Applied for: {jobTitle}</p>
+                </div>
                 <Badge className={getStatusColor(candidate.status)}>
                   {formatStatus(candidate.status)}
                 </Badge>

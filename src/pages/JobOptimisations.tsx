@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Header from '@/components/layout/Header';
-import Navigation from '@/components/layout/Navigation';
+import JobListingsHeader from '@/components/layout/JobListingsHeader';
 import JobSidebar from '@/components/jobs/JobSidebar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -49,16 +49,16 @@ const JobOptimisations = () => {
     return (
       <div className="min-h-screen flex flex-col bg-reed-light">
         <Header user={{...currentUser, company: 'Reed.co.uk'}} />
-        <Navigation />
+      <JobListingsHeader />
         <div className="flex-1 flex">
-          <div className="w-1/4 max-w-xs bg-white">
+          <div className="w-1/4 max-w-xs bg-white shadow-sm">
             <JobSidebar 
               onSelectJob={handleSelectJob} 
               selectedJobId={selectedJobId || null} 
             />
           </div>
           <div className="p-8 flex-1">
-            <Card>
+            <Card className="shadow-sm">
               <CardContent className="p-8 flex justify-center items-center">
                 <p>Job not found.</p>
               </CardContent>
@@ -171,11 +171,11 @@ const JobOptimisations = () => {
   return (
     <div className="min-h-screen flex flex-col bg-reed-light">
       <Header user={{...currentUser, company: 'Reed.co.uk'}} />
-      <Navigation />
+        <JobListingsHeader />
       
       <div className="flex-1 flex">
-        <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-120px)]">
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30} className="bg-white">
+        <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-140px)]">
+          <ResizablePanel defaultSize={20} minSize={15} maxSize={30} className="bg-white shadow-sm">
             <JobSidebar 
               onSelectJob={handleSelectJob} 
               selectedJobId={jobId || null} 
@@ -189,8 +189,8 @@ const JobOptimisations = () => {
           </ResizableHandle>
           
           <ResizablePanel defaultSize={80} className="overflow-y-auto">
-            <div className="p-6">
-              <div className="mb-6 flex justify-between items-center">
+            <div className="p-8">
+              <div className="mb-8 flex justify-between items-center">
                 <div>
                   <h1 className="text-2xl font-bold text-reed-secondary">Optimisations for: {job.title}</h1>
                   <p className="text-gray-600">{job.company} • {job.location}</p>
@@ -204,7 +204,7 @@ const JobOptimisations = () => {
               </div>
               
               {/* Performance Metrics Widget */}
-              <Card className="mb-6 bg-white hover:shadow-lg transition-shadow">
+              <Card className="mb-8 bg-white hover:shadow-lg transition-shadow">
                 <CardHeader className="border-b bg-white">
                   <CardTitle className="text-lg flex items-center">
                     <div className="rounded-full bg-reed/10 p-3 mr-3">
@@ -393,7 +393,7 @@ const JobOptimisations = () => {
               </Card>
               
               {/* Top 3 Widgets */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 {/* Salary Widget */}
                 <Card className="hover:shadow-md transition-shadow">
                   <CardHeader className={`border-b flex items-center ${getStatusColors(optimizations.salary.status).bg}`}>
@@ -459,7 +459,7 @@ const JobOptimisations = () => {
               </div>
               
               {/* Suggestions List */}
-              <Card className="mb-6">
+              <Card className="mb-8">
                 <CardHeader className="bg-white border-b flex items-center">
                   <CardTitle className="text-lg flex items-center">
                     <div className="rounded-full bg-reed/10 p-3 mr-3">
@@ -568,7 +568,7 @@ const JobOptimisations = () => {
               </Card>
               
               {/* AI Optimised Job Description Widget */}
-              <Card className="mb-6 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setShowDescription(!showDescription)}>
+              <Card className="mb-8 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setShowDescription(!showDescription)}>
                 <CardHeader className="bg-white border-b flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center">
                     <div className="rounded-full bg-reed/10 p-3 mr-3">
@@ -629,8 +629,8 @@ const JobOptimisations = () => {
                       </p>
                     </div>
                     
-                    <div className="mt-6 flex justify-end">
-                      <Button variant="outline" className="mr-2">Save as Draft</Button>
+                    <div className="mt-8 flex justify-end gap-4">
+                      <Button variant="outline">Save as Draft</Button>
                       <Button className="bg-reed hover:bg-reed-hover">Apply Changes</Button>
                     </div>
                   </CardContent>

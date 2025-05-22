@@ -1,0 +1,175 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import Header from '@/components/layout/Header';
+import Navigation from '@/components/layout/Navigation';
+import { currentUser, jobs } from '@/data/mockData';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { ArrowUpRight, ArrowDownRight, Users, Clock, Eye, BarChart3, ChevronRight } from 'lucide-react';
+
+const JobOptimisations = () => {
+  return (
+    <div className="min-h-screen flex flex-col bg-reed-light">
+      <Header user={{...currentUser, company: 'Reed.co.uk'}} />
+      <Navigation />
+      
+      <div className="bg-reed-light p-6 h-full overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-reed-secondary">Job Listings</h2>
+          <Link to="/">
+            <Button variant="outline">Back to Dashboard</Button>
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-1 gap-6">
+          {jobs.map(job => (
+            <Card key={job.id} className="overflow-hidden">
+              <div className="flex flex-col md:flex-row">
+                <div className="p-6 flex-grow">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-xl font-semibold text-reed-secondary">{job.title}</h3>
+                      <p className="text-gray-600">{job.company} • {job.location}</p>
+                      <p className="text-sm text-gray-500 mt-1">Posted: {job.datePosted}</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm">Edit</Button>
+                      <Button size="sm">View Details</Button>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="bg-white p-4 rounded-lg border shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center">
+                          <Eye className="h-4 w-4 mr-2 text-gray-500" />
+                          <span className="text-sm font-medium">Views</span>
+                        </div>
+                        <Badge className="bg-green-100 text-green-800">
+                          <ArrowUpRight className="h-3 w-3 mr-1" />
+                          12%
+                        </Badge>
+                      </div>
+                      <div className="text-xl font-semibold">{Math.floor(Math.random() * 1000) + 500}</div>
+                      <Progress value={75} className="h-1 mt-2" />
+                    </div>
+                    
+                    <div className="bg-white p-4 rounded-lg border shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center">
+                          <Users className="h-4 w-4 mr-2 text-gray-500" />
+                          <span className="text-sm font-medium">Applications</span>
+                        </div>
+                        {Math.random() > 0.5 ? (
+                          <Badge className="bg-green-100 text-green-800">
+                            <ArrowUpRight className="h-3 w-3 mr-1" />
+                            8%
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-red-100 text-red-800">
+                            <ArrowDownRight className="h-3 w-3 mr-1" />
+                            5%
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="text-xl font-semibold">{Math.floor(Math.random() * 50) + 10}</div>
+                      <Progress value={Math.random() * 100} className="h-1 mt-2" />
+                    </div>
+                    
+                    <div className="bg-white p-4 rounded-lg border shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                          <span className="text-sm font-medium">Time to Fill</span>
+                        </div>
+                        {Math.random() > 0.5 ? (
+                          <Badge className="bg-green-100 text-green-800">
+                            <ArrowUpRight className="h-3 w-3 mr-1" />
+                            Faster
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-amber-100 text-amber-800">
+                            <Clock className="h-3 w-3 mr-1" />
+                            Average
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="text-xl font-semibold">{Math.floor(Math.random() * 20) + 10} days</div>
+                      <Progress value={Math.random() * 100} className="h-1 mt-2" />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white p-4 rounded-lg border shadow-sm">
+                      <h4 className="text-sm font-medium mb-2 flex items-center">
+                        <BarChart3 className="h-4 w-4 mr-2 text-gray-500" />
+                        Optimization Score
+                      </h4>
+                      <div className="flex items-center">
+                        <Progress value={Math.floor(Math.random() * 30) + 70} className="h-2 flex-grow mr-2" />
+                        <span className="text-sm font-medium">{Math.floor(Math.random() * 30) + 70}%</span>
+                      </div>
+                      <div className="mt-2 text-sm text-gray-600">
+                        {Math.random() > 0.5 ? 
+                          "Your job posting is performing well. Consider adding more skills to attract better candidates." :
+                          "Add more details about benefits to improve application rate."}
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white p-4 rounded-lg border shadow-sm">
+                      <h4 className="text-sm font-medium mb-2">Candidate Quality</h4>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <div className="text-xs text-gray-500">Excellent</div>
+                          <div className="text-sm font-medium">{Math.floor(Math.random() * 10) + 5}</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-500">Good</div>
+                          <div className="text-sm font-medium">{Math.floor(Math.random() * 15) + 10}</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-500">Average</div>
+                          <div className="text-sm font-medium">{Math.floor(Math.random() * 20) + 5}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-50 p-6 flex flex-col justify-between border-t md:border-t-0 md:border-l">
+                  <div className="space-y-4">
+                    <div>
+                      <div className="text-sm font-medium mb-1">Suggested Actions</div>
+                      <ul className="text-sm space-y-2">
+                        <li className="flex items-start">
+                          <div className="h-5 w-5 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mr-2 mt-0.5">!</div>
+                          <span>Update job description with more specific requirements</span>
+                        </li>
+                        <li className="flex items-start">
+                          <div className="h-5 w-5 rounded-full bg-green-100 text-green-800 flex items-center justify-center mr-2 mt-0.5">+</div>
+                          <span>Add information about company culture and benefits</span>
+                        </li>
+                        <li className="flex items-start">
+                          <div className="h-5 w-5 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center mr-2 mt-0.5">i</div>
+                          <span>Consider promoting this job to increase visibility</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <Button variant="link" className="mt-4 w-full justify-center">
+                    View Full Optimization Report <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default JobOptimisations;
