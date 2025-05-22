@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -239,7 +240,9 @@ const jobSectorMapping = {
     "customer service", "customer advisor", "shopping", "checkout", "e-commerce",
     "online retail", "visual merchandiser", "product demonstrator", "telemarketer",
     "retail assistant", "shop assistant", "sales consultant", "brand ambassador",
-    "key account manager", "category manager"
+    "key account manager", "category manager",
+    // Added logistics-related roles
+    "driver", "warehouse operator", "logistics"
   ]
 };
 
