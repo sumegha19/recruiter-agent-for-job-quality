@@ -1,13 +1,12 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBar, ArrowLeft, MessageCircle } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, TrendingUp, BriefcaseIcon, Users, ChartBar, ArrowLeft, MessageCircle, Search } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { currentUser } from '@/data/mockData';
 import { 
   HoverCard, 
@@ -20,6 +19,14 @@ import {
   PopoverTrigger 
 } from "@/components/ui/popover";
 import { toast } from "@/components/ui/use-toast";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from "@/components/ui/command";
 
 // Market data for different sectors
 const sectorData = {
@@ -182,12 +189,11 @@ const MarketInsights = () => {
   const navigate = useNavigate();
   const [selectedSector, setSelectedSector] = useState("IT & Telecom");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [sectorMetrics, setSectorMetrics] = useState(sectorData["IT & Telecom"].metrics);
   const [marketData, setMarketData] = useState(sectorData["IT & Telecom"].marketData);
   const [positionTrends, setPositionTrends] = useState(sectorData["IT & Telecom"].positionTrends);
-  const [isSearching, setIsSearching] = useState(false);
   
   // Function to detect sector from query
   const detectSector = (query: string): string | null => {
@@ -215,86 +221,52 @@ const MarketInsights = () => {
     return null;
   };
 
+  // Function to update dashboard based on detected sector
+  const updateDashboardForSector = useCallback((sector: string | null) => {
+    if (sector) {
+      setSelectedSector(sector);
+      setSectorMetrics(sectorData[sector].metrics);
+      setMarketData(sectorData[sector].marketData);
+      setPositionTrends(sectorData[sector].positionTrends);
+      
+      toast({
+        title: "Insights Updated",
+        description: `Showing market insights for the ${sector} sector.`,
+        duration: 3000,
+      });
+    } else {
+      toast({
+        title: "Sector Not Detected",
+        description: "We couldn't detect a specific sector. Showing default insights.",
+        duration: 3000,
+      });
+    }
+  }, []);
+
   // Function to handle search query
   const handleSearch = useCallback((query: string) => {
-    setSearchQuery(query);
-    setPopoverOpen(false);
-    
     if (!query.trim()) return;
     
     setIsSearching(true);
+    setPopoverOpen(false);
     
     // Simulate API request with a timeout
     setTimeout(() => {
       const detectedSector = detectSector(query);
-      
-      if (detectedSector) {
-        setSelectedSector(detectedSector);
-        setSectorMetrics(sectorData[detectedSector].metrics);
-        setMarketData(sectorData[detectedSector].marketData);
-        setPositionTrends(sectorData[detectedSector].positionTrends);
-        
-        toast({
-          title: "Insights Updated",
-          description: `Showing market insights for the ${detectedSector} sector.`,
-          duration: 3000,
-        });
-      } else {
-        toast({
-          title: "Sector Not Detected",
-          description: "We couldn't detect a specific sector. Showing default insights.",
-          duration: 3000,
-        });
-      }
-      
+      updateDashboardForSector(detectedSector);
       setIsSearching(false);
-    }, 1000);
-  }, []);
+    }, 800);
+  }, [updateDashboardForSector]);
 
-  // Handle suggested question click - modified to fix the issue
-  const handleSuggestedQuestionClick = (question: string) => {
-    // First update the input field
+  // Handle question selection from suggestions
+  const handleQuestionSelect = (question: string) => {
     setSearchQuery(question);
-    
-    // Close the popover immediately
     setPopoverOpen(false);
-    
-    // Set searching state
-    setIsSearching(true);
-    
-    // Process the query (extract from handleSearch to ensure we're always running the same logic)
-    setTimeout(() => {
-      const detectedSector = detectSector(question);
-      
-      console.log("Selected question:", question);
-      console.log("Detected sector:", detectedSector);
-      
-      if (detectedSector) {
-        setSelectedSector(detectedSector);
-        setSectorMetrics(sectorData[detectedSector].metrics);
-        setMarketData(sectorData[detectedSector].marketData);
-        setPositionTrends(sectorData[detectedSector].positionTrends);
-        
-        toast({
-          title: "Insights Updated",
-          description: `Showing market insights for the ${detectedSector} sector.`,
-          duration: 3000,
-        });
-      } else {
-        toast({
-          title: "Sector Not Detected",
-          description: "We couldn't detect a specific sector. Showing default insights.",
-          duration: 3000,
-        });
-      }
-      
-      setIsSearching(false);
-    }, 1000);
+    handleSearch(question);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
       handleSearch(searchQuery);
     }
   };
@@ -321,65 +293,54 @@ const MarketInsights = () => {
         {/* Intelligent Search Input */}
         <HoverCard>
           <HoverCardTrigger asChild>
-            <div>
-              <Popover 
-                open={popoverOpen && isInputFocused}
-                onOpenChange={setPopoverOpen}
-              >
+            <div className="mb-6">
+              <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
-                  <div 
-                    className={`bg-gray-100 rounded-lg p-4 mb-6 flex items-center shadow-sm border border-gray-200 ${isInputFocused ? 'ring-2 ring-reed/40' : 'hover:border-gray-300'}`}
-                    onClick={() => setIsInputFocused(true)}
-                    tabIndex={0}
-                  >
-                    <MessageCircle className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
-                    <Textarea
+                  <div className="bg-gray-100 rounded-lg p-4 flex items-center shadow-sm border border-gray-200 hover:border-gray-300 focus-within:ring-2 focus-within:ring-reed/40">
+                    <Search className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
+                    <Input
                       placeholder="What job are you looking to post? (e.g., Software Engineer, Registered Nurse, Financial Analyst)"
-                      className="border-0 focus-visible:ring-0 focus:ring-0 focus-visible:ring-offset-0 shadow-none resize-none p-0 min-h-0 h-6 bg-transparent placeholder:text-gray-400 text-sm flex-1"
+                      className="border-0 focus-visible:ring-0 focus:ring-0 focus-visible:ring-offset-0 shadow-none bg-transparent placeholder:text-gray-400 text-sm flex-1"
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
-                        setPopoverOpen(!!e.target.value);
+                        setPopoverOpen(true);
                       }}
                       onKeyDown={handleKeyDown}
-                      onFocus={() => {
-                        setIsInputFocused(true);
-                        setPopoverOpen(true); // Always show suggestions when focused
-                      }}
-                      onBlur={() => {
-                        // Delay hiding popover to allow for click on popover content
-                        setTimeout(() => {
-                          setIsInputFocused(false);
-                          setPopoverOpen(false);
-                        }, 200);
-                      }}
+                      onFocus={() => setPopoverOpen(true)}
                     />
                     {isSearching && (
                       <div className="w-4 h-4 rounded-full border-2 border-reed border-t-transparent animate-spin ml-2"></div>
                     )}
+                    {!isSearching && searchQuery && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-gray-400 hover:text-gray-500"
+                        onClick={() => setSearchQuery("")}
+                      >
+                        ✕
+                      </Button>
+                    )}
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-full max-w-md p-0 shadow-lg border-gray-200" align="start">
-                  <div className="py-2">
-                    <p className="px-4 py-2 text-sm font-medium text-gray-700">Suggested Questions</p>
-                    <div className="mt-1">
-                      {suggestedQuestions.map((question, index) => (
-                        <button 
-                          key={index} 
-                          className="px-4 py-3 text-sm text-left w-full hover:bg-gray-100 border-t border-gray-100 flex items-start"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation(); // Stop event bubbling
-                            handleSuggestedQuestionClick(question);
-                          }}
-                          type="button"
-                        >
-                          <span className="text-reed mr-2 mt-0.5">•</span>
-                          {question}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                <PopoverContent className="w-full p-0 shadow-lg border-gray-200" align="start" sideOffset={4}>
+                  <Command>
+                    <CommandList>
+                      <CommandGroup heading="Suggested Questions">
+                        {suggestedQuestions.map((question, index) => (
+                          <CommandItem
+                            key={index}
+                            onSelect={() => handleQuestionSelect(question)}
+                            className="flex items-start cursor-pointer"
+                          >
+                            <span className="text-reed mr-2">•</span>
+                            {question}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
                 </PopoverContent>
               </Popover>
             </div>
