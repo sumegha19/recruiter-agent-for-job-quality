@@ -5,83 +5,76 @@
 
 @layer base {
   :root {
-    --background: 260 30% 98%;
-    --foreground: 260 30% 10%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 260 30% 10%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 260 30% 10%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
-    --primary: 325 100% 50%;
-    --primary-foreground: 0 0% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
 
-    --secondary: 260 30% 96%;
-    --secondary-foreground: 260 30% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 260 30% 96%;
-    --muted-foreground: 260 20% 40%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-    --accent: 325 100% 50%;
-    --accent-foreground: 0 0% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 260 30% 90%;
-    --input: 260 30% 90%;
-    --ring: 325 100% 50%;
+    --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 260, 30%, 97%;
-    --sidebar-foreground: 260, 30%, 20%;
-    --sidebar-primary: 325, 100%, 50%;
-    --sidebar-primary-foreground: 0, 0%, 98%;
-    --sidebar-accent: 260, 30%, 95%;
-    --sidebar-accent-foreground: 260, 30%, 10%;
-    --sidebar-border: 260, 30%, 90%;
-    --sidebar-ring: 325, 100%, 50%;
+    --reed: 358 71% 40%;
+    --reed-secondary: 234 46% 30%;
+    --reed-hover: 358 71% 35%;
+    --reed-light: 0 0% 97%;
+    --reed-accent: 22 100% 60%;
+    --reed-accent-hover: 22 100% 55%;
   }
 
   .dark {
-    --background: 260 30% 10%;
-    --foreground: 260 30% 98%;
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
 
-    --card: 260 30% 12%;
-    --card-foreground: 260 30% 98%;
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
 
-    --popover: 260 30% 12%;
-    --popover-foreground: 260 30% 98%;
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
 
-    --primary: 325 100% 50%;
-    --primary-foreground: 0 0% 98%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
 
-    --secondary: 260 30% 20%;
-    --secondary-foreground: 0 0% 98%;
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
 
-    --muted: 260 30% 20%;
-    --muted-foreground: 260 20% 70%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
 
-    --accent: 325 100% 50%;
-    --accent-foreground: 0 0% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
 
-    --border: 260 30% 20%;
-    --input: 260 30% 20%;
-    --ring: 325 100% 50%;
-    
-    --sidebar-background: 260 30% 12%;
-    --sidebar-foreground: 260 20% 90%;
-    --sidebar-primary: 325 100% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 260 30% 18%;
-    --sidebar-accent-foreground: 260 20% 90%;
-    --sidebar-border: 260 30% 20%;
-    --sidebar-ring: 325 100% 50%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.5rem;
   }
 }
 
@@ -89,22 +82,25 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-/* AI Animated Border - iPhone-like glowing border effect */
+/* AI animated border for the Wider Market Insights tile */
 .ai-animated-border::before {
-  content: '';
+  content: "";
   position: absolute;
-  inset: -2px;
-  border-radius: 0.5rem;
-  padding: 2px;
+  inset: 0;
+  border-radius: 0.5rem; /* Match card border-radius */
+  padding: 1.5px; /* Border thickness */
   background: linear-gradient(
-    45deg,
-    #8B5CF6, #D946EF, #F97316, #33C3F0, #0EA5E9, #9b87f5, #7E69AB
+    120deg,
+    #8B5CF6, /* Purple */
+    #D946EF, /* Pink */
+    #EC4899, /* Magenta */
+    #8B5CF6  /* Back to purple */
   );
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
@@ -112,16 +108,19 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   background-size: 300% 300%;
-  animation: animatedBorder 6s ease infinite;
-  z-index: 1;
+  animation: animateBorder 4s linear infinite;
+  opacity: 0.7;
+  pointer-events: none; /* Make sure it doesn't interfere with clicks */
 }
 
-@keyframes animatedBorder {
-  0%, 100% {
+@keyframes animateBorder {
+  0% {
     background-position: 0% 50%;
   }
   50% {
     background-position: 100% 50%;
   }
+  100% {
+    background-position: 0% 50%;
+  }
 }
-

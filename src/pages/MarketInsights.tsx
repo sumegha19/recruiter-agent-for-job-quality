@@ -523,7 +523,7 @@ const MarketInsights = () => {
           </div>
         </div>
 
-        {/* Metrics Grid */}
+        {/* Metrics Grid - Updated to ensure uniform size */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <MetricCard 
             title="Average Salary"
@@ -565,7 +565,7 @@ const MarketInsights = () => {
             icon={<Users className="h-5 w-5 text-reed" />}
           />
 
-          {/* AI Insights Card */}
+          {/* AI Insights Card - Made clickable to open dialog */}
           <AIInsightsCard onClick={() => setShowAIInsights(true)} />
         </div>
 
@@ -622,6 +622,9 @@ const MarketInsights = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* AI Insights Dialog */}
+        <AIInsightsDialog open={showAIInsights} onClose={() => setShowAIInsights(false)} />
       </div>
     </div>
   );
@@ -679,7 +682,7 @@ const BrainAIIcon = () => {
   );
 };
 
-// Updated MetricCard component with AI animation support
+// Updated MetricCard component with AI animation support and uniform sizing
 interface MetricCardProps {
   title: string;
   value: string;
@@ -695,8 +698,8 @@ const MetricCard = ({ title, value, trend, trendPositive, icon, info, isAIEnable
   const aiEnabledClass = isAIEnabled ? "ai-animated-border relative" : "";
   
   return (
-    <Card className={`overflow-hidden ${aiEnabledClass}`}>
-      <CardContent className="p-6">
+    <Card className={`overflow-hidden h-full ${aiEnabledClass}`}>
+      <CardContent className="p-6 h-full flex flex-col justify-between">
         <div className="flex justify-between items-start">
           <div>
             <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
@@ -722,19 +725,19 @@ const MetricCard = ({ title, value, trend, trendPositive, icon, info, isAIEnable
   );
 };
 
-// AI Insights Card Component
+// AI Insights Card Component - Made more uniform with other cards
 const AIInsightsCard = ({ onClick }: { onClick: () => void }) => {
   return (
     <Card 
-      className="overflow-hidden ai-animated-border relative cursor-pointer hover:shadow-md transition-shadow" 
+      className="overflow-hidden ai-animated-border relative cursor-pointer hover:shadow-md transition-shadow h-full" 
       onClick={onClick}
     >
       <CardContent className="p-6 flex flex-col items-center justify-center h-full">
         <div className="rounded-full bg-gradient-to-br from-purple-600 to-pink-500 p-4 shadow-lg mb-3">
           <BrainAIIcon />
         </div>
-        <h3 className="text-lg font-medium text-center">Wider Market Insights</h3>
-        <p className="text-sm text-muted-foreground text-center mt-1">AI-powered analysis</p>
+        <h3 className="text-lg font-medium text-center mb-1">Wider Market Insights</h3>
+        <p className="text-sm text-muted-foreground text-center">AI-powered analysis</p>
         <Button variant="link" size="sm" className="mt-2">
           View full report
         </Button>
