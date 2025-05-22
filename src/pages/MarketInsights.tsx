@@ -287,7 +287,10 @@ const MarketInsights = () => {
         <HoverCard>
           <HoverCardTrigger asChild>
             <div>
-              <Popover open={popoverOpen && isInputFocused}>
+              <Popover 
+                open={popoverOpen && isInputFocused}
+                onOpenChange={setPopoverOpen}
+              >
                 <PopoverTrigger asChild>
                   <div 
                     className={`bg-gray-100 rounded-lg p-4 mb-6 flex items-center shadow-sm border border-gray-200 ${isInputFocused ? 'ring-2 ring-reed/40' : 'hover:border-gray-300'}`}
@@ -309,8 +312,11 @@ const MarketInsights = () => {
                         setPopoverOpen(!!searchQuery);
                       }}
                       onBlur={() => {
-                        setIsInputFocused(false);
-                        setTimeout(() => setPopoverOpen(false), 200);
+                        // Delay hiding popover to allow for click on popover content
+                        setTimeout(() => {
+                          setIsInputFocused(false);
+                          setPopoverOpen(false);
+                        }, 200);
                       }}
                     />
                     {isSearching && (
@@ -326,7 +332,11 @@ const MarketInsights = () => {
                         <button 
                           key={index} 
                           className="px-4 py-3 text-sm text-left w-full hover:bg-gray-100 border-t border-gray-100 flex items-start"
-                          onClick={() => handleSuggestedQuestionClick(question)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleSuggestedQuestionClick(question);
+                          }}
+                          type="button"
                         >
                           <span className="text-reed mr-2 mt-0.5">•</span>
                           {question}
