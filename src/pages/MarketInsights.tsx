@@ -251,10 +251,45 @@ const MarketInsights = () => {
     }, 1000);
   }, []);
 
-  // Handle suggested question click
+  // Handle suggested question click - modified to fix the issue
   const handleSuggestedQuestionClick = (question: string) => {
+    // First update the input field
     setSearchQuery(question);
-    handleSearch(question);
+    
+    // Close the popover immediately
+    setPopoverOpen(false);
+    
+    // Set searching state
+    setIsSearching(true);
+    
+    // Process the query (extract from handleSearch to ensure we're always running the same logic)
+    setTimeout(() => {
+      const detectedSector = detectSector(question);
+      
+      console.log("Selected question:", question);
+      console.log("Detected sector:", detectedSector);
+      
+      if (detectedSector) {
+        setSelectedSector(detectedSector);
+        setSectorMetrics(sectorData[detectedSector].metrics);
+        setMarketData(sectorData[detectedSector].marketData);
+        setPositionTrends(sectorData[detectedSector].positionTrends);
+        
+        toast({
+          title: "Insights Updated",
+          description: `Showing market insights for the ${detectedSector} sector.`,
+          duration: 3000,
+        });
+      } else {
+        toast({
+          title: "Sector Not Detected",
+          description: "We couldn't detect a specific sector. Showing default insights.",
+          duration: 3000,
+        });
+      }
+      
+      setIsSearching(false);
+    }, 1000);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -309,7 +344,7 @@ const MarketInsights = () => {
                       onKeyDown={handleKeyDown}
                       onFocus={() => {
                         setIsInputFocused(true);
-                        setPopoverOpen(!!searchQuery);
+                        setPopoverOpen(true); // Always show suggestions when focused
                       }}
                       onBlur={() => {
                         // Delay hiding popover to allow for click on popover content
@@ -334,6 +369,7 @@ const MarketInsights = () => {
                           className="px-4 py-3 text-sm text-left w-full hover:bg-gray-100 border-t border-gray-100 flex items-start"
                           onClick={(e) => {
                             e.preventDefault();
+                            e.stopPropagation(); // Stop event bubbling
                             handleSuggestedQuestionClick(question);
                           }}
                           type="button"
