@@ -94,3 +94,34 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* AI Animated Border - iPhone-like glowing border effect */
+.ai-animated-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 0.5rem;
+  padding: 2px;
+  background: linear-gradient(
+    45deg,
+    #8B5CF6, #D946EF, #F97316, #33C3F0, #0EA5E9, #9b87f5, #7E69AB
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  background-size: 300% 300%;
+  animation: animatedBorder 6s ease infinite;
+  z-index: 1;
+}
+
+@keyframes animatedBorder {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+

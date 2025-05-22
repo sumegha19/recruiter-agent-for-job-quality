@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -557,13 +558,15 @@ const MarketInsights = () => {
             icon={<Users className="h-5 w-5 text-reed" />}
           />
 
+          {/* Updated Metric Card - Changed from Market Demand Index to Wider Market Insights */}
           <MetricCard 
-            title="Market Demand Index"
+            title="Wider Market Insights"
             value={sectorMetrics.demandIndex}
             trend={sectorMetrics.demandIndexTrend}
             trendPositive={true}
-            icon={<ChartBar className="h-5 w-5 text-reed" />}
+            icon={<AIHatIcon />}
             info="Scale of 1-10, higher means more demand"
+            isAIEnabled={true} // Added new prop for AI-enabled styling
           />
         </div>
 
@@ -625,6 +628,31 @@ const MarketInsights = () => {
   );
 };
 
+// Custom AI Hat Icon component
+const AIHatIcon = () => {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="20" 
+      height="20" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className="text-reed"
+    >
+      <path d="M2 12.5a7 7 0 0 0 7-7"/>
+      <path d="M9 11h10a2.5 2.5 0 1 0 0-5"/>
+      <path d="M11 5h3a2.5 2.5 0 1 0 0-5"/>
+      <path d="M13 20h4a1 1 0 1 0 0-2h-1a1 1 0 1 1 0-2h5a1 1 0 0 0 0-2h-2"/>
+      <path d="M5 19h7a1 1 0 1 0 0-2h-1a1 1 0 1 1 0-2h2"/>
+    </svg>
+  );
+};
+
+// Updated MetricCard component with AI animation support
 interface MetricCardProps {
   title: string;
   value: string;
@@ -632,11 +660,15 @@ interface MetricCardProps {
   trendPositive: boolean;
   icon: React.ReactNode;
   info?: string;
+  isAIEnabled?: boolean; // New prop for AI-enabled cards
 }
 
-const MetricCard = ({ title, value, trend, trendPositive, icon, info }: MetricCardProps) => {
+const MetricCard = ({ title, value, trend, trendPositive, icon, info, isAIEnabled = false }: MetricCardProps) => {
+  // Class to apply for AI-enabled cards with animated border
+  const aiEnabledClass = isAIEnabled ? "ai-animated-border relative" : "";
+  
   return (
-    <Card className="overflow-hidden">
+    <Card className={`overflow-hidden ${aiEnabledClass}`}>
       <CardContent className="p-6">
         <div className="flex justify-between items-start">
           <div>
@@ -654,7 +686,7 @@ const MetricCard = ({ title, value, trend, trendPositive, icon, info }: MetricCa
             </div>
             {info && <p className="text-xs text-muted-foreground mt-1">{info}</p>}
           </div>
-          <div className="rounded-full bg-reed/10 p-2">
+          <div className={`rounded-full ${isAIEnabled ? 'bg-gradient-to-br from-purple-100 to-purple-200' : 'bg-reed/10'} p-2`}>
             {icon}
           </div>
         </div>
