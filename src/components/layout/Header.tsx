@@ -41,7 +41,12 @@ const Header = ({ user }: HeaderProps) => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
-                <AvatarImage src={user.avatar} alt={user.name} />
+                {/* Use a placeholder Amazon logo for the user avatar */}
+                <AvatarImage 
+                  src="https://images.unsplash.com/photo-1493962853295-0fd70327578a?auto=format&fit=crop&q=80&w=100&h=100" 
+                  alt="Amazon Recruiter" 
+                  className="object-cover"
+                />
                 <AvatarFallback className="bg-orange-500 text-white relative">
                   <UserIcon className="h-5 w-5" />
                   <div className="absolute -top-1 -right-1 h-4 w-4 bg-yellow-400 rounded-full border-2 border-white" 
