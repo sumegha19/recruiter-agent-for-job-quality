@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -241,8 +240,8 @@ const JobOptimisations = () => {
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="flex flex-col">
-                          <span className="text-2xl font-bold">{performanceMetrics.timeToFirstApplication.value}</span>
-                          <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.timeToFirstApplication.benchmark}</span>
+                          <span className="text-2xl font-bold text-black">{performanceMetrics.timeToFirstApplication.value}</span>
+                          <span className="text-xs text-gray-500">Reed.co.uk benchmark: {performanceMetrics.timeToFirstApplication.benchmark}</span>
                           <div className="h-16 mt-2">
                             <ResponsiveContainer width="100%" height="100%">
                               <AreaChart data={performanceMetrics.timeToFirstApplication.chartData}>
@@ -286,8 +285,8 @@ const JobOptimisations = () => {
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="flex flex-col">
-                          <span className="text-2xl font-bold">{performanceMetrics.applicationsPerVacancy.value}</span>
-                          <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.applicationsPerVacancy.benchmark}</span>
+                          <span className="text-2xl font-bold text-black">{performanceMetrics.applicationsPerVacancy.value}</span>
+                          <span className="text-xs text-gray-500">Reed.co.uk benchmark: {performanceMetrics.applicationsPerVacancy.benchmark}</span>
                           <div className="h-16 mt-2">
                             <ResponsiveContainer width="100%" height="100%">
                               <AreaChart data={performanceMetrics.applicationsPerVacancy.chartData}>
@@ -331,8 +330,8 @@ const JobOptimisations = () => {
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="flex flex-col">
-                          <span className="text-2xl font-bold">{performanceMetrics.firstWeekApplications.value}</span>
-                          <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.firstWeekApplications.benchmark}</span>
+                          <span className="text-2xl font-bold text-black">{performanceMetrics.firstWeekApplications.value}</span>
+                          <span className="text-xs text-gray-500">Reed.co.uk benchmark: {performanceMetrics.firstWeekApplications.benchmark}</span>
                           <div className="h-16 mt-2">
                             <ResponsiveContainer width="100%" height="100%">
                               <RechartsBarChart data={performanceMetrics.firstWeekApplications.chartData}>
@@ -370,8 +369,8 @@ const JobOptimisations = () => {
                       </CardHeader>
                       <CardContent className="pt-0">
                         <div className="flex flex-col">
-                          <span className="text-2xl font-bold">{performanceMetrics.conversionRate.value}</span>
-                          <span className="text-xs text-gray-500">Industry benchmark: {performanceMetrics.conversionRate.benchmark}</span>
+                          <span className="text-2xl font-bold text-black">{performanceMetrics.conversionRate.value}</span>
+                          <span className="text-xs text-gray-500">Reed.co.uk benchmark: {performanceMetrics.conversionRate.benchmark}</span>
                           <div className="h-16 mt-2">
                             <ResponsiveContainer width="100%" height="100%">
                               <AreaChart data={performanceMetrics.conversionRate.chartData}>
