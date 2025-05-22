@@ -60,7 +60,7 @@ const JobSidebar = ({ onSelectJob, selectedJobId }: JobSidebarProps) => {
                       <p className="text-xs text-gray-400">Posted: {job.datePosted}</p>
                       {job.isQualityDescription ? 
                         <span className="text-xs px-2 py-0.5 bg-green-50 text-green-600 rounded-full">Optimized</span> : 
-                        <span className="text-xs px-2 py-0.5 bg-accent/10 text-accent rounded-full">Needs review</span>
+                        <span className="text-xs px-2 py-0.5 bg-amber-50 text-amber-600 rounded-full">Needs review</span>
                       }
                     </div>
                   </div>
