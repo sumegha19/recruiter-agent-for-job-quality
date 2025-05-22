@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,6 +27,13 @@ import {
   CommandItem,
   CommandList
 } from "@/components/ui/command";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 // Market data for different sectors
 const sectorData = {
@@ -297,6 +303,7 @@ const MarketInsights = () => {
   const [sectorMetrics, setSectorMetrics] = useState(sectorData["IT & Telecom"].metrics);
   const [marketData, setMarketData] = useState(sectorData["IT & Telecom"].marketData);
   const [positionTrends, setPositionTrends] = useState(sectorData["IT & Telecom"].positionTrends);
+  const [showAIInsights, setShowAIInsights] = useState(false);
   
   // Enhanced function to detect sector from query using ISCO-based job classification
   const detectSector = (query: string): string | null => {
@@ -558,16 +565,8 @@ const MarketInsights = () => {
             icon={<Users className="h-5 w-5 text-reed" />}
           />
 
-          {/* Updated Metric Card - Changed from Market Demand Index to Wider Market Insights */}
-          <MetricCard 
-            title="Wider Market Insights"
-            value={sectorMetrics.demandIndex}
-            trend={sectorMetrics.demandIndexTrend}
-            trendPositive={true}
-            icon={<AIHatIcon />}
-            info="Scale of 1-10, higher means more demand"
-            isAIEnabled={true} // Added new prop for AI-enabled styling
-          />
+          {/* AI Insights Card */}
+          <AIInsightsCard onClick={() => setShowAIInsights(true)} />
         </div>
 
         {/* Charts */}
@@ -652,6 +651,34 @@ const AIHatIcon = () => {
   );
 };
 
+// Brain AI Icon - slightly larger and more prominent for the center of the card
+const BrainAIIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="text-white"
+    >
+      <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08 2.5 2.5 0 0 0 4.91.05L12 20V4.5Z" />
+      <path d="M16 8V5c0-1.1.9-2 2-2" />
+      <path d="M12 13h4" />
+      <path d="M12 18h6a2 2 0 0 1 2 2v1" />
+      <path d="M12 8h8" />
+      <path d="M20.5 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z" />
+      <path d="M16.5 13a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z" />
+      <path d="M20.5 21a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z" />
+      <path d="M18.5 3a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z" />
+    </svg>
+  );
+};
+
 // Updated MetricCard component with AI animation support
 interface MetricCardProps {
   title: string;
@@ -660,7 +687,7 @@ interface MetricCardProps {
   trendPositive: boolean;
   icon: React.ReactNode;
   info?: string;
-  isAIEnabled?: boolean; // New prop for AI-enabled cards
+  isAIEnabled?: boolean;
 }
 
 const MetricCard = ({ title, value, trend, trendPositive, icon, info, isAIEnabled = false }: MetricCardProps) => {
@@ -692,6 +719,128 @@ const MetricCard = ({ title, value, trend, trendPositive, icon, info, isAIEnable
         </div>
       </CardContent>
     </Card>
+  );
+};
+
+// AI Insights Card Component
+const AIInsightsCard = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <Card 
+      className="overflow-hidden ai-animated-border relative cursor-pointer hover:shadow-md transition-shadow" 
+      onClick={onClick}
+    >
+      <CardContent className="p-6 flex flex-col items-center justify-center h-full">
+        <div className="rounded-full bg-gradient-to-br from-purple-600 to-pink-500 p-4 shadow-lg mb-3">
+          <BrainAIIcon />
+        </div>
+        <h3 className="text-lg font-medium text-center">Wider Market Insights</h3>
+        <p className="text-sm text-muted-foreground text-center mt-1">AI-powered analysis</p>
+        <Button variant="link" size="sm" className="mt-2">
+          View full report
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
+// AI Insights Dialog Component
+const AIInsightsDialog = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold mb-2">Market Insights for Recruitment of Senior Software Engineers in 2025 📚</DialogTitle>
+          <DialogDescription className="text-right text-xs text-muted-foreground">
+            Last updated: {new Date().toLocaleString()}
+          </DialogDescription>
+        </DialogHeader>
+        
+        <div className="space-y-6 mt-2">
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Summary</h3>
+            <p className="text-sm text-muted-foreground">
+              The recruitment landscape for senior software engineers is being heavily influenced by trends in artificial intelligence integration, changes in remote work policies, and shifting geographic preferences for tech talent. Companies like Amazon are at the frontier of these changes, impacting recruitment strategies and job market dynamics.
+            </p>
+          </section>
+          
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Insights</h3>
+            <p className="text-sm text-muted-foreground">
+              The ongoing demand for artificial intelligence (AI) capabilities and the incorporation of AI into software engineering are primary pain points in the tech industry, driving a focus on skill-based hiring (Gartner Survey, 2025). Furthermore, the remote work model is settling into a hybrid norm, requiring companies to balance flexibility with the need for occasional in-office presence (OpenPR, 2025). Notably, Amazon's continuous growth expectations, driven by technological advancements, suggest a promising career trajectory for software engineers willing to engage with AI and cloud integration (The Motley Fool, 2025).
+            </p>
+          </section>
+          
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Analysis</h3>
+            
+            <h4 className="text-md font-medium mt-4 mb-2">Critical Evaluation</h4>
+            <p className="text-sm text-muted-foreground">
+              The need for AI expertise is reshaping recruitment, emphasizing skills and adaptability over traditional educational qualifications. This trend aligns with increased adoption of hybrid work models and regional talent diversifications. However, tensions arise as some corporations, especially in the US, are pulling back on remote work freedoms, creating potential bottlenecks and dissatisfaction among digital nomads (Business Insider, 2025).
+            </p>
+            
+            <h4 className="text-md font-medium mt-4 mb-2">Cross-Study Comparisons</h4>
+            <p className="text-sm text-muted-foreground">
+              While Gartner highlights skill-based hiring as the future, Inside Higher Ed describes a more traditional job struggle, emphasizing stability and benefits. This juxtaposition underlines an emerging discrepancy between institutional expectations and industry requirements.
+            </p>
+            
+            <h4 className="text-md font-medium mt-4 mb-2">Research Gaps</h4>
+            <p className="text-sm text-muted-foreground">
+              The long-term impacts of AI integration on job security, especially in less tech-centric roles, require further study. Moreover, the cultural shift in work-life balance preferences necessitates a deeper understanding of employee psychology and its impact on productivity.
+            </p>
+          </section>
+          
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Future Directions</h3>
+            
+            <h4 className="text-md font-medium mt-4 mb-2">Emerging Opportunities</h4>
+            <p className="text-sm text-muted-foreground">
+              Amazon and other tech giants offer fertile grounds for AI-experienced engineers, particularly those adept at cloud services (e.g., AWS). This presents opportunities for software engineers to shape their career paths in line with technological trends and company growth dynamics.
+            </p>
+            
+            <h4 className="text-md font-medium mt-4 mb-2">Potential Applications</h4>
+            <p className="text-sm text-muted-foreground">
+              The surge in hybrid work environments opens avenues for developing advanced team collaboration tools and ergonomic home office solutions, as highlighted in the US WFH furniture market forecast (GlobeNewswire, 2025).
+            </p>
+            
+            <h4 className="text-md font-medium mt-4 mb-2">Open Questions</h4>
+            <ul className="list-disc ml-5 text-sm text-muted-foreground">
+              <li>How will AI automation reshape entry-level roles?</li>
+              <li>Can geographic decentralization sustain the tech industry's growth without exacerbating regional inequalities?</li>
+              <li>How will socio-economic factors shift as tech companies increasingly influence urban-rural migrations?</li>
+            </ul>
+          </section>
+          
+          <section>
+            <h3 className="text-lg font-semibold mb-2">Conclusions</h3>
+            <p className="text-sm text-muted-foreground">
+              Recruitment for senior software engineers is pivoting towards embracing technological capabilities, notably AI integration and remote work adaptability. Companies like Amazon are poised to leverage these trends for growth, albeit with emerging challenges in maintaining a satisfied, distributed workforce. Future research should continue to monitor the balance of remote work dynamics and AI-driven job transformations.
+            </p>
+          </section>
+          
+          <section>
+            <h3 className="text-lg font-semibold mb-2">References</h3>
+            <ol className="list-decimal ml-5 text-xs text-muted-foreground space-y-1">
+              <li>Gartner Survey Finds 77% of Engineering Leaders Identify AI Integration as a Major Challenge, Gartner, 2025.</li>
+              <li>Prediction: Amazon Could Surge by 100% in the Next 5 Years, The Motley Fool, 2025.</li>
+              <li>Remote Work Surge Boosts The Team Collaboration Software Market, OpenPR, 2025.</li>
+              <li>U.S. Work-from-Home (WFH) Furniture Market Trends, GlobeNewswire, 2025.</li>
+              <li>The Death of the Digital Nomad, Business Insider, 2025.</li>
+              <li>25 Stats for 2025 Graduates, Inside Higher Ed, 2025.</li>
+            </ol>
+          </section>
+          
+          <div className="border-t pt-4 mt-6 text-xs text-muted-foreground">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+              <p>Research conducted by AI Job Scholar</p>
+              <div className="flex flex-col items-start md:items-end">
+                <p>Published: 2025-05-22</p>
+                <p>Last Updated: 10:12:36</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
