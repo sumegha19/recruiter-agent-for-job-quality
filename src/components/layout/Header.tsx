@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User as UserIcon, Bell, HelpCircle } from "lucide-react";
+import { User as UserIcon, Bell, HelpCircle, Settings, LogOut } from "lucide-react";
 
 interface HeaderProps {
   user: User;
@@ -42,26 +42,42 @@ const Header = ({ user }: HeaderProps) => {
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="bg-reed text-white">
+                <AvatarFallback className="bg-orange-500 text-white relative">
                   <UserIcon className="h-5 w-5" />
+                  <div className="absolute -top-1 -right-1 h-4 w-4 bg-yellow-400 rounded-full border-2 border-white" 
+                    title="Amazon Recruiter">
+                  </div>
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end">
+          <DropdownMenuContent className="w-64" align="end">
             <DropdownMenuLabel>
               <div className="flex flex-col gap-1">
-                <span className="font-medium">{user.name}</span>
+                <div className="flex items-center">
+                  <span className="font-medium">{user.name}</span>
+                  <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded-full">Amazon</span>
+                </div>
                 <span className="text-xs text-muted-foreground">{user.role}</span>
                 <span className="text-xs text-muted-foreground">{user.company}</span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>My Account</DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <UserIcon className="h-4 w-4" />
+              <span>My Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+              <Settings className="h-4 w-4" />
+              <span>Account Settings</span>
+            </DropdownMenuItem>
             <DropdownMenuItem>Employer Dashboard</DropdownMenuItem>
             <DropdownMenuItem>Manage Adverts</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Sign out</DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-2 text-red-600 cursor-pointer">
+              <LogOut className="h-4 w-4" />
+              <span>Sign out</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
