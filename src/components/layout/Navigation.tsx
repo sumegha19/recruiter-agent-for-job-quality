@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Briefcase, User, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -67,4 +67,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-
