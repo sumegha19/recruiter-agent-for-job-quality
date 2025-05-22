@@ -241,7 +241,7 @@ const jobSectorMapping = {
     "online retail", "visual merchandiser", "product demonstrator", "telemarketer",
     "retail assistant", "shop assistant", "sales consultant", "brand ambassador",
     "key account manager", "category manager",
-    // Added logistics-related roles
+    // Added logistics-related roles that are often associated with retail supply chain
     "driver", "warehouse operator", "logistics"
   ]
 };
